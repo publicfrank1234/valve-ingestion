@@ -27,8 +27,14 @@ if [ ! -f ".env" ]; then
     exit 1
 fi
 
-# Load environment variables
-export $(cat .env | grep -v '^#' | xargs)
+# Load environment variables (if .env exists)
+if [ -f .env ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+    echo "✓ Loaded environment variables from .env"
+else
+    echo "⚠️  Warning: .env file not found"
+    echo "Please create .env file with your database credentials"
+fi
 
 # Setup database schema
 echo ""

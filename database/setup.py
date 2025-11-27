@@ -11,16 +11,31 @@ def setup_database():
     """Create database schema."""
     import sys
     import os
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    import config
     
-    # Get connection details from config or environment
-    db_config = config.DB_CONFIG
-    db_host = os.getenv('DB_HOST') or db_config['host']
-    db_port = os.getenv('DB_PORT') or db_config['port']
-    db_name = os.getenv('DB_NAME') or db_config['database']
-    db_user = os.getenv('DB_USER') or db_config['user']
-    db_password = os.getenv('DB_PASSWORD') or db_config['password']
+    # Load .env file if it exists
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass  # dotenv not installed, skip
+    
+    # Get connection details from environment variables (required)
+    db_host = os.getenv('DB_HOST')
+    db_port = os.getenv('DB_PORT', '5432')
+    db_name = os.getenv('DB_NAME', 'postgres')
+    db_user = os.getenv('DB_USER', 'postgres')
+    db_password = os.getenv('DB_PASSWORD')
+    
+    if not db_host or not db_password:
+        print("✗ Error: Database credentials not found!")
+        print("\nPlease create a .env file with your database credentials:")
+        print("  DB_HOST=db.your-project.supabase.co")
+        print("  DB_PASSWORD=your-password")
+        print("  DB_USER=postgres")
+        print("  DB_NAME=postgres")
+        print("  DB_PORT=5432")
+        print("  DB_SSLMODE=require")
+        sys.exit(1)
     
     # Build connection string (URL encode password if needed)
     from urllib.parse import quote_plus

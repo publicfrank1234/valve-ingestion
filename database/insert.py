@@ -15,23 +15,46 @@ def get_db_connection():
     """Get PostgreSQL connection from environment variables."""
     import sys
     import os
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    import config
+    
+    # Load .env file if it exists
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass  # dotenv not installed, skip
     
     # Try DATABASE_URL first (full connection string)
     database_url = os.getenv('DATABASE_URL')
     if database_url:
         return psycopg2.connect(database_url)
     
-    # Otherwise use config
-    db_config = config.DB_CONFIG
+    # Get from environment variables (required)
+    db_host = os.getenv('DB_HOST')
+    db_port = os.getenv('DB_PORT', '5432')
+    db_name = os.getenv('DB_NAME', 'postgres')
+    db_user = os.getenv('DB_USER', 'postgres')
+    db_password = os.getenv('DB_PASSWORD')
+    db_sslmode = os.getenv('DB_SSLMODE', 'require')
+    
+    if not db_host or not db_password:
+        raise ValueError(
+            "Database credentials not found! Please set DB_HOST and DB_PASSWORD environment variables.\n"
+            "Create a .env file with:\n"
+            "  DB_HOST=db.your-project.supabase.co\n"
+            "  DB_PASSWORD=your-password\n"
+            "  DB_USER=postgres\n"
+            "  DB_NAME=postgres\n"
+            "  DB_PORT=5432\n"
+            "  DB_SSLMODE=require"
+        )
+    
     return psycopg2.connect(
-        host=db_config['host'],
-        port=db_config['port'],
-        database=db_config['database'],
-        user=db_config['user'],
-        password=db_config['password'],
-        sslmode=db_config['sslmode']
+        host=db_host,
+        port=db_port,
+        database=db_name,
+        user=db_user,
+        password=db_password,
+        sslmode=db_sslmode
     )
 
 def insert_spec(conn, spec_data: Dict) -> Optional[int]:
