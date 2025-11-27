@@ -5,6 +5,7 @@ Automated system to extract valve specifications from ValveMan.com product pages
 ## Overview
 
 This system:
+
 1. Extracts product URLs from ValveMan sitemap
 2. Scrapes each product page
 3. Extracts technical specifications, prices, and spec sheet links
@@ -81,6 +82,7 @@ python extraction/batch_processor.py product_urls.json
 ## Configuration
 
 Edit `config.py` to adjust:
+
 - Batch size
 - Rate limiting (delay between requests)
 - Database connection settings
@@ -88,12 +90,14 @@ Edit `config.py` to adjust:
 ## Monitoring
 
 Check progress:
+
 ```bash
 python scripts/check_progress.py
 python database/query.py count
 ```
 
 View recent entries:
+
 ```bash
 python database/query.py 10
 ```
@@ -101,6 +105,7 @@ python database/query.py 10
 ## Database Schema
 
 The database stores:
+
 - Technical specifications (normalized to valve-spec-schema.json format)
 - Price information (SKU, starting price, MSRP, savings)
 - Specification sheet PDF links
@@ -109,16 +114,55 @@ The database stores:
 ## Files Generated
 
 - `product_urls.json` - All product URLs from sitemap
-- `extraction_progress.json` - Progress tracking (allows resume)
+- `extraction_progress.json` - Progress tracking (allows resume) - **Commit this to git!**
 - `extraction_errors.json` - Error log
 - `crawl.log` - Full extraction log (if running in background)
 
 ## Resume After Interruption
 
-The system automatically saves progress. To resume:
+**Simple approach: Use progress file**
+
+The system uses `extraction_progress.json` as the source of truth. To resume on a different machine:
+
+1. **Commit progress file to git:**
+
+   ```bash
+   # Edit .gitignore to allow extraction_progress.json
+   # Then commit it:
+   git add extraction_progress.json
+   git commit -m "Add progress file"
+   git push
+   ```
+
+2. **On cloud instance, pull the progress file:**
+   ```bash
+   git pull
+   python extraction/batch_processor.py product_urls.json
+   # It will automatically:
+   # - Continue from where it left off
+   # - Retry failed URLs (by default)
+   ```
+
+The progress file tracks:
+
+- All successfully processed URLs
+- Failed URLs (will be retried automatically)
+- Last processed index
+- Start time
+
+### Retry Failed URLs
+
+**By default, failed URLs are automatically retried** when you run the batch processor. To disable retries, set in `config.py`:
+
+```python
+RETRY_FAILED_URLS = False
+```
+
+**Or retry only failed URLs:**
+
 ```bash
-python extraction/batch_processor.py product_urls.json
-# It will automatically continue from where it left off
+python scripts/retry_failed.py
+# This processes only the URLs that previously failed
 ```
 
 ## Requirements
@@ -130,5 +174,3 @@ python extraction/batch_processor.py product_urls.json
 ## License
 
 MIT
-
-# valve-ingestion

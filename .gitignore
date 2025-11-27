@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Environment
+.env
+.env.local
+
+# Progress and logs (uncomment to commit progress.json to git)
+# extraction_progress.json  # Comment this out if you want to commit it
+extraction_errors.json
+crawl.log
+debug_spec_section.html
+
+# Extracted data
+product_urls.json
+test_urls.json
+test_extracted_spec.json
+sample_extracted_specs.json
+
+# Database
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
