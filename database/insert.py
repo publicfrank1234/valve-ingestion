@@ -48,14 +48,45 @@ def get_db_connection():
             "  DB_SSLMODE=require"
         )
     
-    return psycopg2.connect(
-        host=db_host,
-        port=db_port,
-        database=db_name,
-        user=db_user,
-        password=db_password,
-        sslmode=db_sslmode
-    )
+    # Try connection with IPv4 preference
+    try:
+        # Force IPv4 by using connection_factory or connection parameters
+        return psycopg2.connect(
+            host=db_host,
+            port=db_port,
+            database=db_name,
+            user=db_user,
+            password=db_password,
+            sslmode=db_sslmode,
+            connect_timeout=10
+        )
+    except psycopg2.OperationalError as e:
+        # If IPv6 connection fails, try using connection pooler (port 6543)
+        if "Network is unreachable" in str(e) or "IPv6" in str(e):
+            print("⚠️  Direct connection failed (IPv6 issue). Trying connection pooler...")
+            pooler_host = db_host.replace('.supabase.co', '.pooler.supabase.com')
+            pooler_port = '6543'
+            try:
+                return psycopg2.connect(
+                    host=pooler_host,
+                    port=pooler_port,
+                    database=db_name,
+                    user=db_user,
+                    password=db_password,
+                    sslmode=db_sslmode,
+                    connect_timeout=10
+                )
+            except Exception as pooler_error:
+                raise ValueError(
+                    f"Connection failed. Tried both direct and pooler.\n"
+                    f"Direct error: {e}\n"
+                    f"Pooler error: {pooler_error}\n\n"
+                    f"Try using connection pooler in .env:\n"
+                    f"  DB_HOST=db.deaohsesihodomvhqlxe.pooler.supabase.com\n"
+                    f"  DB_PORT=6543"
+                )
+        else:
+            raise
 
 def insert_spec(conn, spec_data: Dict) -> Optional[int]:
     """Insert a single valve spec into the database."""
