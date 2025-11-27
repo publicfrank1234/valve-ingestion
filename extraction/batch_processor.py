@@ -247,9 +247,19 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python batch_extract_and_insert.py <urls_json_file>")
         print("Example: python batch_extract_and_insert.py product_urls.json")
+        print("\nIf product_urls.json doesn't exist, extract URLs first:")
+        print("  python extraction/sitemap_extractor.py")
         sys.exit(1)
     
     urls_file = sys.argv[1]
+    
+    # Check if file exists
+    if not os.path.exists(urls_file):
+        print(f"✗ Error: {urls_file} not found!")
+        print(f"\nTo extract product URLs from sitemap, run:")
+        print(f"  python extraction/sitemap_extractor.py")
+        print(f"\nThis will create {urls_file} with all product URLs.")
+        sys.exit(1)
     
     # Load URLs
     print(f"Loading URLs from {urls_file}...")
