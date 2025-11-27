@@ -53,29 +53,8 @@ def get_db_connection():
     encoded_password = quote_plus(db_password)
     conn_string = f"postgresql://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}?sslmode={db_sslmode}"
     
-    # Try to force IPv4 by using connection parameters
-    try:
-        # First try with hostname (might work if system prefers IPv4)
-        return psycopg2.connect(conn_string)
-    except psycopg2.OperationalError as e:
-        if "Network is unreachable" in str(e) or "IPv6" in str(e) or "2600:" in str(e):
-            # IPv6 issue - try to resolve to IPv4
-            try:
-                import socket
-                # Force IPv4 resolution
-                ipv4_info = socket.getaddrinfo(db_host, int(db_port), socket.AF_INET, socket.SOCK_STREAM)
-                if ipv4_info:
-                    ipv4_address = ipv4_info[0][4][0]
-                    print(f"⚠️  IPv6 connection failed. Using IPv4 address: {ipv4_address}")
-                    # Use IP address instead of hostname
-                    conn_string_ipv4 = f"postgresql://{db_user}:{encoded_password}@{ipv4_address}:{db_port}/{db_name}?sslmode={db_sslmode}"
-                    return psycopg2.connect(conn_string_ipv4)
-            except Exception as resolve_error:
-                print(f"⚠️  Could not resolve to IPv4: {resolve_error}")
-                # Re-raise original error
-                raise e
-        else:
-            raise
+    # Use connection string (same method as local - no IPv4 forcing)
+    return psycopg2.connect(conn_string)
 
 def insert_spec(conn, spec_data: Dict) -> Optional[int]:
     """Insert a single valve spec into the database."""

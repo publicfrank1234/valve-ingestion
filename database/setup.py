@@ -37,7 +37,7 @@ def setup_database():
         print("  DB_SSLMODE=require")
         sys.exit(1)
     
-    # Build connection string (URL encode password if needed)
+    # Build connection string (URL encode password if needed) - same as local
     from urllib.parse import quote_plus
     encoded_password = quote_plus(db_password)
     conn_string = f"postgresql://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}"
@@ -48,30 +48,8 @@ def setup_database():
     print(f"User: {db_user}\n")
     
     try:
-        # Try to connect
-        try:
-            conn = psycopg2.connect(conn_string)
-        except psycopg2.OperationalError as e:
-            if "Network is unreachable" in str(e) or "IPv6" in str(e) or "2600:" in str(e):
-                # IPv6 issue - try to resolve to IPv4
-                print("⚠️  IPv6 connection failed. Trying IPv4...")
-                try:
-                    import socket
-                    # Force IPv4 resolution
-                    ipv4_info = socket.getaddrinfo(db_host, int(db_port), socket.AF_INET, socket.SOCK_STREAM)
-                    if ipv4_info:
-                        ipv4_address = ipv4_info[0][4][0]
-                        print(f"Resolved to IPv4: {ipv4_address}")
-                        # Use IP address instead of hostname
-                        conn_string_ipv4 = f"postgresql://{db_user}:{encoded_password}@{ipv4_address}:{db_port}/{db_name}"
-                        conn = psycopg2.connect(conn_string_ipv4)
-                    else:
-                        raise e
-                except Exception as resolve_error:
-                    print(f"✗ Could not resolve to IPv4: {resolve_error}")
-                    raise e
-            else:
-                raise
+        # Connect to database (same method as local - no IPv4 forcing)
+        conn = psycopg2.connect(conn_string)
         print("✓ Connected successfully!")
         
         # Read and execute schema

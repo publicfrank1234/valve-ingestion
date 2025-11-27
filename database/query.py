@@ -36,14 +36,12 @@ def get_db_connection():
     if not db_host or not db_password:
         raise ValueError("Database credentials not found! Please set DB_HOST and DB_PASSWORD in .env file")
     
-    return psycopg2.connect(
-        host=db_host,
-        port=db_port,
-        database=db_name,
-        user=db_user,
-        password=db_password,
-        sslmode=db_sslmode
-    )
+    # Build connection string (same as local)
+    from urllib.parse import quote_plus
+    encoded_password = quote_plus(db_password)
+    conn_string = f"postgresql://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}?sslmode={db_sslmode}"
+    
+    return psycopg2.connect(conn_string)
 
 def query_specs(limit=10):
     """Query specs from database."""
