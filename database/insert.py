@@ -23,12 +23,12 @@ def get_db_connection():
     except ImportError:
         pass  # dotenv not installed, skip
     
-    # Try DATABASE_URL first (full connection string)
+    # Try DATABASE_URL first (full connection string) - same as local
     database_url = os.getenv('DATABASE_URL')
     if database_url:
         return psycopg2.connect(database_url)
     
-    # Get from environment variables (required)
+    # Build connection string from individual variables (same as local setup)
     db_host = os.getenv('DB_HOST')
     db_port = os.getenv('DB_PORT', '5432')
     db_name = os.getenv('DB_NAME', 'postgres')
@@ -40,53 +40,21 @@ def get_db_connection():
         raise ValueError(
             "Database credentials not found! Please set DB_HOST and DB_PASSWORD environment variables.\n"
             "Create a .env file with:\n"
-            "  DB_HOST=db.your-project.supabase.co\n"
-            "  DB_PASSWORD=your-password\n"
+            "  DB_HOST=db.deaohsesihodomvhqlxe.supabase.co\n"
+            "  DB_PASSWORD=valve@123\n"
             "  DB_USER=postgres\n"
             "  DB_NAME=postgres\n"
             "  DB_PORT=5432\n"
             "  DB_SSLMODE=require"
         )
     
-    # Try connection with IPv4 preference
-    try:
-        # Force IPv4 by using connection_factory or connection parameters
-        return psycopg2.connect(
-            host=db_host,
-            port=db_port,
-            database=db_name,
-            user=db_user,
-            password=db_password,
-            sslmode=db_sslmode,
-            connect_timeout=10
-        )
-    except psycopg2.OperationalError as e:
-        # If IPv6 connection fails, try using connection pooler (port 6543)
-        if "Network is unreachable" in str(e) or "IPv6" in str(e):
-            print("⚠️  Direct connection failed (IPv6 issue). Trying connection pooler...")
-            pooler_host = db_host.replace('.supabase.co', '.pooler.supabase.com')
-            pooler_port = '6543'
-            try:
-                return psycopg2.connect(
-                    host=pooler_host,
-                    port=pooler_port,
-                    database=db_name,
-                    user=db_user,
-                    password=db_password,
-                    sslmode=db_sslmode,
-                    connect_timeout=10
-                )
-            except Exception as pooler_error:
-                raise ValueError(
-                    f"Connection failed. Tried both direct and pooler.\n"
-                    f"Direct error: {e}\n"
-                    f"Pooler error: {pooler_error}\n\n"
-                    f"Try using connection pooler in .env:\n"
-                    f"  DB_HOST=db.deaohsesihodomvhqlxe.pooler.supabase.com\n"
-                    f"  DB_PORT=6543"
-                )
-        else:
-            raise
+    # Build connection string (URL encode password) - same as local
+    from urllib.parse import quote_plus
+    encoded_password = quote_plus(db_password)
+    conn_string = f"postgresql://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}?sslmode={db_sslmode}"
+    
+    # Use connection string (same method as local)
+    return psycopg2.connect(conn_string)
 
 def insert_spec(conn, spec_data: Dict) -> Optional[int]:
     """Insert a single valve spec into the database."""
