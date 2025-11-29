@@ -31,7 +31,7 @@ cd valve-spec-ingestion/database
 python3 database_api.py
 ```
 
-The server will start on `http://localhost:5000`
+The server will start on `http://localhost:6000`
 
 ### 2. Test the API
 

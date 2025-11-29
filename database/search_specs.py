@@ -8,6 +8,7 @@ import os
 import json
 from typing import Dict, List, Optional, Any
 from psycopg2.extras import RealDictCursor
+from urllib.parse import quote_plus
 
 # Load .env file if it exists
 try:
@@ -45,13 +46,33 @@ except ImportError:
     comprehensive_normalize_valve_type = None
 
 def get_db_connection():
-    """Get PostgreSQL connection from environment variables."""
+    """Get PostgreSQL connection from environment variables.
+    Supports connection pooler for IPv4 compatibility.
+    """
+    # Try DATABASE_URL first (full connection string)
     database_url = os.getenv('DATABASE_URL')
     if database_url:
         return psycopg2.connect(database_url)
     
+    # Otherwise use individual environment variables
     password = os.getenv('DB_PASSWORD', 'valve@123')
     
+    # URL encode password if needed
+    encoded_password = quote_plus(password)
+    
+    # Try connection pooler first (if pooler host is set) - supports IPv4
+    pooler_host = os.getenv('DB_POOLER_HOST')
+    if pooler_host:
+        pooler_user = os.getenv('DB_POOLER_USER', 'postgres.deaohsesihodomvhqlxe')
+        pooler_port = os.getenv('DB_POOLER_PORT', '6543')  # Default pooler port
+        conn_string = f"postgresql://{pooler_user}:{encoded_password}@{pooler_host}:{pooler_port}/postgres?sslmode=require"
+        try:
+            return psycopg2.connect(conn_string)
+        except Exception as e:
+            print(f"⚠️  Pooler connection failed: {e}")
+            print("Trying direct connection...")
+    
+    # Fall back to direct connection (or use DB_HOST if it's already a pooler)
     return psycopg2.connect(
         host=os.getenv('DB_HOST', 'db.deaohsesihodomvhqlxe.supabase.co'),
         port=os.getenv('DB_PORT', '5432'),
@@ -67,7 +88,8 @@ def search_specs(
     body_material: Optional[str] = None,
     pressure_class: Optional[str] = None,
     end_connection: Optional[str] = None,
-    max_results: int = 10
+    max_results: int = 10,
+    make_end_connection_optional: bool = True
 ) -> List[Dict[str, Any]]:
     """
     Search valve specs by various criteria.
@@ -83,10 +105,11 @@ def search_specs(
     Returns:
         List of matching valve specs as dictionaries
     """
-    conn = get_db_connection()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    
+    conn = None
+    cursor = None
     try:
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         # Build dynamic WHERE clause
         conditions = []
         params = []
@@ -323,12 +346,79 @@ def search_specs(
         cursor.execute(query, params)
         results = cursor.fetchall()
         
+        # If no results and end_connection was specified and make_end_connection_optional is True,
+        # try again without end_connection requirement (make it optional)
+        if len(results) == 0 and end_connection and make_end_connection_optional:
+            # Remove end connection condition and try again
+            conditions_without_end = [c for c in conditions if not c.startswith("((") or "end_connection" not in c]
+            if len(conditions_without_end) < len(conditions):
+                # Rebuild params without end connection params
+                params_without_end = []
+                conditions_without_end_copy = []
+                param_idx = 0
+                
+                for condition in conditions:
+                    if "end_connection" not in condition:
+                        conditions_without_end_copy.append(condition)
+                        # Count placeholders in this condition
+                        placeholder_count = condition.count("%s")
+                        params_without_end.extend(params[param_idx:param_idx + placeholder_count])
+                        param_idx += placeholder_count
+                    else:
+                        # Skip end connection params
+                        placeholder_count = condition.count("%s")
+                        param_idx += placeholder_count
+                
+                # Add max_results param
+                params_without_end.append(max_results)
+                
+                where_clause_without_end = " AND ".join(conditions_without_end_copy) if conditions_without_end_copy else "1=1"
+                query_without_end = f"""
+                    SELECT 
+                        id,
+                        source_url,
+                        spec_sheet_url,
+                        sku,
+                        valve_type,
+                        size_nominal,
+                        body_material,
+                        max_pressure,
+                        pressure_unit,
+                        pressure_class,
+                        max_temperature,
+                        temperature_unit,
+                        end_connection_inlet,
+                        end_connection_outlet,
+                        starting_price,
+                        msrp,
+                        savings,
+                        spec,
+                        price_info,
+                        extracted_at
+                    FROM valve_specs
+                    WHERE {where_clause_without_end}
+                    ORDER BY extracted_at DESC
+                    LIMIT %s
+                """
+                
+                cursor.execute(query_without_end, params_without_end)
+                results = cursor.fetchall()
+        
         # Convert to list of dicts
         return [dict(row) for row in results]
         
     finally:
-        cursor.close()
-        conn.close()
+        # Safely close cursor and connection
+        if cursor:
+            try:
+                cursor.close()
+            except Exception:
+                pass
+        if conn:
+            try:
+                conn.close()
+            except Exception:
+                pass
 
 def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_results: int = 10) -> List[Dict[str, Any]]:
     """
