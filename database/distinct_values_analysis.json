@@ -1,0 +1,1906 @@
+{
+  "valve_type": [
+    {
+      "value": "Ball Valve",
+      "count": 1840
+    },
+    {
+      "value": "Butterfly Valves",
+      "count": 1140
+    },
+    {
+      "value": "2-Way Pneumatically Actuated Ball Valve",
+      "count": 818
+    },
+    {
+      "value": "2-Way Electrically Actuated Ball Valve",
+      "count": 756
+    },
+    {
+      "value": "Pressure Gauge with Glycerin Filled",
+      "count": 508
+    },
+    {
+      "value": "Butterfly Valve",
+      "count": 380
+    },
+    {
+      "value": "Check Valve",
+      "count": 328
+    },
+    {
+      "value": "Solenoid Valve",
+      "count": 311
+    },
+    {
+      "value": "Pneumatically Actuated Butterfly Valve",
+      "count": 303
+    },
+    {
+      "value": "High Performance Butterfly Valve",
+      "count": 238
+    },
+    {
+      "value": "Gate Valve",
+      "count": 191
+    },
+    {
+      "value": "Globe Valve",
+      "count": 183
+    },
+    {
+      "value": "Pressure Gauge",
+      "count": 171
+    },
+    {
+      "value": "Adapter",
+      "count": 170
+    },
+    {
+      "value": "Backflow Preventor",
+      "count": 163
+    },
+    {
+      "value": "3-Way Electrically Actuated Ball Valve",
+      "count": 155
+    },
+    {
+      "value": "3-Way Pneumatically Actuated Ball Valve",
+      "count": 145
+    },
+    {
+      "value": "Electrically Actuated Butterfly Valve",
+      "count": 145
+    },
+    {
+      "value": "2-Way Ball Valve (V-Port)",
+      "count": 130
+    },
+    {
+      "value": "Swing Check Valve",
+      "count": 111
+    },
+    {
+      "value": "2-way Pneumatically Actuated Ball Valve",
+      "count": 103
+    },
+    {
+      "value": "Y- Strainer",
+      "count": 95
+    },
+    {
+      "value": "3-Way Diverter Ball Valve",
+      "count": 92
+    },
+    {
+      "value": "2-Piece Ball Valve",
+      "count": 74
+    },
+    {
+      "value": "Air Release Valve",
+      "count": 72
+    },
+    {
+      "value": "Gas Ball Valve",
+      "count": 67
+    },
+    {
+      "value": "Horizontal Swing Check Valve",
+      "count": 58
+    },
+    {
+      "value": "Dielectric Union",
+      "count": 52
+    },
+    {
+      "value": "Silent Check Valve",
+      "count": 52
+    },
+    {
+      "value": "3-Way Ball Valve (L port)",
+      "count": 51
+    },
+    {
+      "value": "3-Piece Ball Valve",
+      "count": 48
+    },
+    {
+      "value": "Industrial Ball Valve",
+      "count": 48
+    },
+    {
+      "value": "Y-Strainer",
+      "count": 48
+    },
+    {
+      "value": "2-Way Ball Valve",
+      "count": 47
+    },
+    {
+      "value": "2- Way Ball Valve",
+      "count": 46
+    },
+    {
+      "value": "2-Way, Cryogenic Ball Valve",
+      "count": 46
+    },
+    {
+      "value": "Firesafe Control Ball Valve",
+      "count": 46
+    },
+    {
+      "value": "Pressure Gauge with Glycerin Filled and 0.8 mm Brass Threaded Orifice",
+      "count": 46
+    },
+    {
+      "value": "Pressure Gauge with Glycerin Filled, Chrome Bezel, and U-Clamp",
+      "count": 46
+    },
+    {
+      "value": "Electric Actuator",
+      "count": 44
+    },
+    {
+      "value": "Globe Style Manual Balancing Valve",
+      "count": 44
+    },
+    {
+      "value": "Inline Check Valve",
+      "count": 44
+    },
+    {
+      "value": "3-Way Ball Valve (L-Port)",
+      "count": 43
+    },
+    {
+      "value": "Mini Ball Valve",
+      "count": 43
+    },
+    {
+      "value": "3-Way Ball Valve (T port)",
+      "count": 42
+    },
+    {
+      "value": "Gate Valve (Non-Rising Stem)",
+      "count": 41
+    },
+    {
+      "value": "Piston Check Valve",
+      "count": 41
+    },
+    {
+      "value": "Vacuum Breaker",
+      "count": 41
+    },
+    {
+      "value": "Eccentric Reducer",
+      "count": 39
+    },
+    {
+      "value": "Pressure Gauge with Glycerin Filled and Chrome Front Flange",
+      "count": 37
+    },
+    {
+      "value": "3-Way Ball Valve (T-Port)",
+      "count": 36
+    },
+    {
+      "value": "Cryogenic, Ball Valve",
+      "count": 36
+    },
+    {
+      "value": "Ball Valve w/ Spring Return Actuator",
+      "count": 33
+    },
+    {
+      "value": "Check Valves",
+      "count": 33
+    },
+    {
+      "value": "Pressure Gauge with Glycerin Filled and Maximum Indicating Pointer",
+      "count": 33
+    },
+    {
+      "value": "Thermostatic Balancing Valve",
+      "count": 33
+    },
+    {
+      "value": "Utility Gas Ball Valve",
+      "count": 33
+    },
+    {
+      "value": "Self-Closing Vacuum Breaker",
+      "count": 32
+    },
+    {
+      "value": "Pneumatic Actuator",
+      "count": 30
+    },
+    {
+      "value": "3-Way Electrically Actuated Ball Valve (T-Port)",
+      "count": 29
+    },
+    {
+      "value": "Pressure Gauge with Glycerin Filled and Brass Front Flange",
+      "count": 28
+    },
+    {
+      "value": "Vacuum Gauge",
+      "count": 28
+    },
+    {
+      "value": "Pressure Gauge with -40\u00b0Service Filled",
+      "count": 27
+    },
+    {
+      "value": "Sanitary Ball Valve",
+      "count": 27
+    },
+    {
+      "value": "3-Way Ball Valve with Double Acting Actuator",
+      "count": 26
+    },
+    {
+      "value": "Concentric Reducer",
+      "count": 26
+    },
+    {
+      "value": "Pressure Gauge with Glycerin Filled and 304 Stainless Steel Front Flange",
+      "count": 26
+    },
+    {
+      "value": "Sanitary, Tube OD Ball Valve",
+      "count": 26
+    },
+    {
+      "value": "Backflow Preventer",
+      "count": 24
+    },
+    {
+      "value": "Basket Strainer",
+      "count": 24
+    },
+    {
+      "value": "Industrial Ball Valve w/ Double Acting Actuator",
+      "count": 24
+    },
+    {
+      "value": "Industrial Ball Valve w/ On/Off Electric Actuator",
+      "count": 24
+    },
+    {
+      "value": "Industrial Ball Valve w/ Spring Return Actuator",
+      "count": 24
+    },
+    {
+      "value": "Ball Valve, 2 Way Valve",
+      "count": 23
+    },
+    {
+      "value": "Ball Valve w/ Double Acting Actuator",
+      "count": 22
+    },
+    {
+      "value": "Ball Valve w/ On/Off Electric Actuator",
+      "count": 22
+    },
+    {
+      "value": "Double Acting Actuator",
+      "count": 22
+    },
+    {
+      "value": "Gate Valve (Rising Stem)",
+      "count": 22
+    },
+    {
+      "value": "V-Ball Valve",
+      "count": 22
+    },
+    {
+      "value": "3-Way Ball Valve",
+      "count": 21
+    },
+    {
+      "value": "Medical Gas Ball Valve",
+      "count": 21
+    },
+    {
+      "value": "Spring Return Actuator",
+      "count": 21
+    },
+    {
+      "value": "Swing Chek Valve- Y-Pattern",
+      "count": 21
+    },
+    {
+      "value": "Vacuum Gauge with Glycerin Filled",
+      "count": 21
+    },
+    {
+      "value": "Clamp x Clamp Concentric Reducer",
+      "count": 20
+    },
+    {
+      "value": "Multiport Electrically Actuated Ball Valve",
+      "count": 20
+    },
+    {
+      "value": "Multiport Pneumatically Actuated Ball Valve",
+      "count": 20
+    },
+    {
+      "value": "Pneumatically Actuated Butterfly Valve T Assembly",
+      "count": 20
+    },
+    {
+      "value": "2-Way Electrically Actuated Ball Valve (V-Port)",
+      "count": 18
+    },
+    {
+      "value": "3-Way Electrically Actuated Ball Valve (L-Port)",
+      "count": 18
+    },
+    {
+      "value": "3-Way Manual Ball Valve",
+      "count": 18
+    },
+    {
+      "value": "Ball Valve (V-Port)",
+      "count": 18
+    },
+    {
+      "value": "Manual Balancing Valve",
+      "count": 18
+    },
+    {
+      "value": "Y-Pattern Swing Check Valve",
+      "count": 18
+    },
+    {
+      "value": "3-Way Ball Valve with Spring Return Actuator",
+      "count": 17
+    },
+    {
+      "value": "Double Acting Pneumatic Actuator",
+      "count": 16
+    },
+    {
+      "value": "Flood Sensor Connection Kit",
+      "count": 16
+    },
+    {
+      "value": "Relief, Bypass, Backpressure, Anti-Siphon Valves",
+      "count": 16
+    },
+    {
+      "value": "Vortex Flow Meter",
+      "count": 16
+    },
+    {
+      "value": "Wafer Check Valve",
+      "count": 16
+    }
+  ],
+  "size_nominal": [
+    {
+      "value": "Dropdown:",
+      "count": 5287
+    },
+    {
+      "value": "2",
+      "count": 584
+    },
+    {
+      "value": "1",
+      "count": 552
+    },
+    {
+      "value": "3/4",
+      "count": 540
+    },
+    {
+      "value": "1/2",
+      "count": 527
+    },
+    {
+      "value": "1-1/2",
+      "count": 414
+    },
+    {
+      "value": "3",
+      "count": 409
+    },
+    {
+      "value": "4",
+      "count": 353
+    },
+    {
+      "value": "1-1/4",
+      "count": 349
+    },
+    {
+      "value": "2-1/2",
+      "count": 272
+    },
+    {
+      "value": "1/4",
+      "count": 206
+    },
+    {
+      "value": "6",
+      "count": 196
+    },
+    {
+      "value": "3/8",
+      "count": 176
+    },
+    {
+      "value": "8",
+      "count": 158
+    },
+    {
+      "value": "1/2 to 2",
+      "count": 128
+    },
+    {
+      "value": "10",
+      "count": 113
+    },
+    {
+      "value": "2 1/2",
+      "count": 109
+    },
+    {
+      "value": "4-1/2",
+      "count": 100
+    },
+    {
+      "value": "1 1/2",
+      "count": 99
+    },
+    {
+      "value": "12",
+      "count": 87
+    },
+    {
+      "value": "1/4 to 2",
+      "count": 73
+    },
+    {
+      "value": "5",
+      "count": 67
+    },
+    {
+      "value": "1/2 to 4",
+      "count": 55
+    },
+    {
+      "value": "1/4 to 4",
+      "count": 50
+    },
+    {
+      "value": "1/2 to 3/4",
+      "count": 36
+    },
+    {
+      "value": "Range1/4 to 2 Max Pressure1000 psiTemperature Rating-320\u00b0F to 100\u00b0FSeat MaterialPCTFEStemBlowout Proof Stem w/ Dual Anti-Static DevicesStem SealsTFM-1600Body SealsASTM A351 GRADE CF8MBallVented, Upstream Ball",
+      "count": 34
+    },
+    {
+      "value": "1 to 4",
+      "count": 29
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range Vacuum and compound ranges through 0 psi to 15,000 psi  Internal Material Copper Alloy Internals",
+      "count": 27
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range Vacuum and compound ranges through 0 psi to 15,000 psi  Internal Material Copper Alloy Internals",
+      "count": 26
+    },
+    {
+      "value": "4  Connection Size 1/2 NPT  Connection Type Male Bottom Connection     Case Material 304 Stainless Steel Case  Pressure Range Vacuum and compound ranges through 0 psi to 20,000 psi  Internal Material 316 Stainless Steel Internals",
+      "count": 26
+    },
+    {
+      "value": "1/2 to 1",
+      "count": 25
+    },
+    {
+      "value": "1/2 to 3",
+      "count": 25
+    },
+    {
+      "value": "2 to 12",
+      "count": 25
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material 304 Stainless Steel Case  Pressure Range Vacuum and compound ranges through 0 psi to 20,000 psi  Internal Material 316 Stainless Steel Internals",
+      "count": 25
+    },
+    {
+      "value": "14",
+      "count": 24
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material 304 Stainless Steel Case  Pressure Range Vacuum and compound ranges through 0 psi to 20,000 psi  Internal Material 316 Stainless Steel Internals",
+      "count": 24
+    },
+    {
+      "value": "4  Connection Size 1/2 NPT  Connection Type Back Connection     Case Material 304 Stainless Steel Case  Pressure Range Vacuum and compound ranges through 0 psi to 20,000 psi  Internal Material 316 Stainless Steel Internals",
+      "count": 23
+    },
+    {
+      "value": "4  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range Vacuum and compound ranges through 0 psi to 15,000 psi  Internal Material Copper Alloy Internals",
+      "count": 22
+    },
+    {
+      "value": "1/4 NPT (1/8 NPT Exhaust Ports)   Operating Pressure 0 to 116 PSI   Operating Temperature 14 to 140\u00b0F (-10 to 60\u00b0C)     Action Direct Acting   Working Medium 40 Micron Filtered Air or Inert Gas   Body Material Anodized Aluminum   Seal Material NBR (Buna N)",
+      "count": 21
+    },
+    {
+      "value": "4  Connection Size 1/4 NPT  Connection Type Bottom Connection     Case Material Brass Case  Pressure Range Vacuum and compound ranges through 0 psi to 15,000 psi  Internal Material Copper Alloy Internals",
+      "count": 21
+    },
+    {
+      "value": "1/2 to 8",
+      "count": 20
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 3,000 psi  Internal Material Copper Alloy Internals",
+      "count": 20
+    },
+    {
+      "value": "16",
+      "count": 19
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 5,000 psi  Internal Material Copper Alloy Internals",
+      "count": 19
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 30 psi  Internal Material Copper Alloy Internals",
+      "count": 18
+    },
+    {
+      "value": "6  Connection Size 1/2 NPT  Connection Type Back Connection     Case Material 304 Stainless Steel Case  Pressure Range Vacuum and compound ranges through 0 psi to 20,000 psi  Internal Material 316 Stainless Steel Internals",
+      "count": 18
+    },
+    {
+      "value": "6  Connection Size 1/2 NPT  Connection Type Male Bottom Connection     Case Material 304 Stainless Steel Case  Pressure Range Vacuum and compound ranges through 0 psi to 20,000 psi  Internal Material 316 Stainless Steel Internals",
+      "count": 18
+    },
+    {
+      "value": "Range 1/4 - 2   Max. Pressure 400 WOG - 100 WSP     Seat Material P.T.F.E   Ball Material Lead Free Brass   Temp. Rating +366\u00b0F   Handle Material Steel   Handle Type Lever   Stem Type Blowout Proof   Stem Material Lead Free Brass",
+      "count": 18
+    },
+    {
+      "value": "1/2 to 12",
+      "count": 16
+    },
+    {
+      "value": "1/2 to 6",
+      "count": 16
+    },
+    {
+      "value": "18",
+      "count": 16
+    },
+    {
+      "value": "20",
+      "count": 16
+    },
+    {
+      "value": "24",
+      "count": 16
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 100 psi  Internal Material Copper Alloy Internals",
+      "count": 15
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 160 psi  Internal Material Copper Alloy Internals",
+      "count": 15
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 600 psi  Internal Material Copper Alloy Internals",
+      "count": 15
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 30 psi  Internal Material Copper Alloy Internals",
+      "count": 15
+    },
+    {
+      "value": "2 x 1",
+      "count": 14
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 200 psi  Internal Material Copper Alloy Internals",
+      "count": 14
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 5,000 psi  Internal Material Copper Alloy Internals",
+      "count": 14
+    },
+    {
+      "value": "3 x 2",
+      "count": 14
+    },
+    {
+      "value": "1/2-2",
+      "count": 12
+    },
+    {
+      "value": "1/4 NPT   Operating Pressure 0 to 116 PSI   Operating Temperature 14 to 140\u00b0F (-10 to 60\u00b0C)     Action Direct Acting   Working Medium 40 Micron Filtered Air or Inert Gas   Body Material Anodized Aluminum   Seal Material NBR (Buna N)",
+      "count": 12
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 300 psi  Internal Material Copper Alloy Internals",
+      "count": 12
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 6,000 psi  Internal Material Copper Alloy Internals",
+      "count": 12
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 160 psi  Internal Material Copper Alloy Internals",
+      "count": 12
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 3,000 psi  Internal Material Copper Alloy Internals",
+      "count": 12
+    },
+    {
+      "value": "2-1/2 to 10",
+      "count": 12
+    },
+    {
+      "value": "3 x 1",
+      "count": 12
+    },
+    {
+      "value": "4 x 2",
+      "count": 12
+    },
+    {
+      "value": "4 x 3",
+      "count": 12
+    },
+    {
+      "value": "Range 1/4 - 3   Max. Pressure 400 WOG - 100 WSP   Seat Material PTFE     Ball Material Chrome-Plated Brass   Max Process Temp -4 to 366\u00b0F   Stem Type Blowout Proof   Stem Material Brass   Actuation Spring Return (SR) Pneumatic   Actuator Supply Pressure Min. 80 psi and Max. 116 psi",
+      "count": 12
+    },
+    {
+      "value": "1/4 to 2-1/2",
+      "count": 11
+    },
+    {
+      "value": "1/4 to 3",
+      "count": 11
+    },
+    {
+      "value": "1/8",
+      "count": 11
+    },
+    {
+      "value": "2 to 36",
+      "count": 11
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 1,000 psi  Internal Material Copper Alloy Internals",
+      "count": 11
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 2,000 psi  Internal Material Copper Alloy Internals",
+      "count": 11
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 7,500 psi  Internal Material Copper Alloy Internals",
+      "count": 11
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 100 psi  Internal Material Copper Alloy Internals",
+      "count": 11
+    },
+    {
+      "value": "30",
+      "count": 11
+    },
+    {
+      "value": "36",
+      "count": 11
+    },
+    {
+      "value": "and materials may differ significantly. It's critical that you know which materials and sizes are suitable for your purpose before you buy a valve.",
+      "count": 11
+    },
+    {
+      "value": "1 x 3/4",
+      "count": 10
+    },
+    {
+      "value": "1-1/2 x 1",
+      "count": 10
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 1,500 psi  Internal Material Copper Alloy Internals",
+      "count": 10
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 600 psi  Internal Material Copper Alloy Internals",
+      "count": 10
+    },
+    {
+      "value": "4  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 30 psi  Internal Material Copper Alloy Internals",
+      "count": 10
+    },
+    {
+      "value": "4  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 5,000 psi  Internal Material Copper Alloy Internals",
+      "count": 10
+    },
+    {
+      "value": "6 x 3",
+      "count": 10
+    },
+    {
+      "value": "6 x 4",
+      "count": 10
+    },
+    {
+      "value": "Range1/4 to 2Max Pressure1000 psi Temperature Rating-320\u00b0FSeat MaterialPCTFEStemBlowout Proof Stem w/ Dual Anti-Static DevicesStem SealsTFM-1600Body SealsASTM A351 GRADE CF8MBallVented, Upstream Ball",
+      "count": 10
+    },
+    {
+      "value": "1 to 6",
+      "count": 9
+    },
+    {
+      "value": "1 x 1/2",
+      "count": 9
+    },
+    {
+      "value": "1/4 to 1",
+      "count": 9
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Back Connection     Case Material Brass Case  Pressure Range 0 to 400 psi  Internal Material Copper Alloy Internals",
+      "count": 9
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 1,500 psi  Internal Material Copper Alloy Internals",
+      "count": 9
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 400 psi  Internal Material Copper Alloy Internals",
+      "count": 9
+    },
+    {
+      "value": "2-1/2  Connection Size 1/4 NPT  Connection Type Male Bottom Connection     Case Material Brass Case  Pressure Range 0 to 6,000 psi  Internal Material Copper Alloy Internals",
+      "count": 9
+    },
+    {
+      "value": "8 x 6",
+      "count": 9
+    }
+  ],
+  "body_material": [
+    {
+      "value": "Stainless Steel",
+      "count": 5674
+    },
+    {
+      "value": "Carbon Steel",
+      "count": 1595
+    },
+    {
+      "value": "Epoxy Coated Ductile Iron",
+      "count": 808
+    },
+    {
+      "value": "Brass",
+      "count": 572
+    },
+    {
+      "value": "Brass C37700",
+      "count": 227
+    },
+    {
+      "value": "Bronze",
+      "count": 227
+    },
+    {
+      "value": "PVC",
+      "count": 206
+    },
+    {
+      "value": "Cast Iron",
+      "count": 189
+    },
+    {
+      "value": "Ductile Iron",
+      "count": 179
+    },
+    {
+      "value": "Lead-Free Brass - C46500",
+      "count": 166
+    },
+    {
+      "value": "Aluminum",
+      "count": 155
+    },
+    {
+      "value": "Ductile Iron - Epoxy Coated",
+      "count": 152
+    },
+    {
+      "value": "Lead-Free Brass - C27453",
+      "count": 139
+    },
+    {
+      "value": "CPVC",
+      "count": 134
+    },
+    {
+      "value": "Lead-Free Brass",
+      "count": 127
+    },
+    {
+      "value": "Lead Free Brass",
+      "count": 122
+    },
+    {
+      "value": "Forged Steel",
+      "count": 108
+    },
+    {
+      "value": "Ductile Iron with Epoxy Coating",
+      "count": 101
+    },
+    {
+      "value": "Lead-Free Bronze - C89836",
+      "count": 86
+    },
+    {
+      "value": "Dezincification Resistant Lead-Free Brass",
+      "count": 70
+    },
+    {
+      "value": "Cast Steel WCB",
+      "count": 66
+    },
+    {
+      "value": "Anodized Aluminum",
+      "count": 62
+    },
+    {
+      "value": "Bronze C84400",
+      "count": 62
+    },
+    {
+      "value": "Lead-Free Brass - C46400",
+      "count": 58
+    },
+    {
+      "value": "Valve Body: Brass",
+      "count": 50
+    },
+    {
+      "value": "Lead-Free Bronze",
+      "count": 44
+    },
+    {
+      "value": "UPVC",
+      "count": 44
+    },
+    {
+      "value": "Lead Free Bronze",
+      "count": 39
+    },
+    {
+      "value": "Cast Brass",
+      "count": 38
+    },
+    {
+      "value": "316L",
+      "count": 27
+    },
+    {
+      "value": "40 micron filtered air, inert gas",
+      "count": 25
+    },
+    {
+      "value": "Cast Iron Body ASTM A126",
+      "count": 24
+    },
+    {
+      "value": "Brass - CW617N",
+      "count": 22
+    },
+    {
+      "value": "Aluminum (Anodized)",
+      "count": 21
+    },
+    {
+      "value": "CF8M",
+      "count": 21
+    },
+    {
+      "value": "Ductile Iron, Epoxy Coated",
+      "count": 21
+    },
+    {
+      "value": "CPVC Body",
+      "count": 20
+    },
+    {
+      "value": "PVC Body",
+      "count": 20
+    },
+    {
+      "value": "Nylon",
+      "count": 19
+    },
+    {
+      "value": "ASTM A216-WCB Cast Steel",
+      "count": 18
+    },
+    {
+      "value": "Brass C35330",
+      "count": 18
+    },
+    {
+      "value": "Cast Iron (ASTM A126 CL B)",
+      "count": 18
+    },
+    {
+      "value": "Cast Steel Body, Trim 8",
+      "count": 18
+    },
+    {
+      "value": "Extruded Aluminum",
+      "count": 17
+    },
+    {
+      "value": "Cast Steel - Trim 8",
+      "count": 16
+    },
+    {
+      "value": "Zinc-Nickel Plated Steel",
+      "count": 16
+    },
+    {
+      "value": "Brass CW617N",
+      "count": 15
+    },
+    {
+      "value": "Cast Bronze - C89844",
+      "count": 14
+    },
+    {
+      "value": "Cast Iron - ASTM A126 B",
+      "count": 14
+    },
+    {
+      "value": "Lead-Free Cast Brass",
+      "count": 14
+    },
+    {
+      "value": "Viton",
+      "count": 14
+    },
+    {
+      "value": "C89836 Lead-Free Bronze",
+      "count": 12
+    },
+    {
+      "value": "Ductile Iron Body with Epoxy Coating",
+      "count": 12
+    },
+    {
+      "value": "Lead-Free Brass C46500",
+      "count": 12
+    },
+    {
+      "value": "Steel",
+      "count": 12
+    },
+    {
+      "value": "360 Brass",
+      "count": 11
+    },
+    {
+      "value": "Bronze (C84400)",
+      "count": 11
+    },
+    {
+      "value": "Cast Iron, Epoxy Coated",
+      "count": 11
+    },
+    {
+      "value": "Chrome Plated Brass",
+      "count": 11
+    },
+    {
+      "value": "Ductile Iron ASTM A536",
+      "count": 11
+    },
+    {
+      "value": "Epoxy Coated Cast Iron",
+      "count": 11
+    },
+    {
+      "value": "TEA Coated Brass C37700",
+      "count": 11
+    },
+    {
+      "value": "316L Steel",
+      "count": 10
+    },
+    {
+      "value": "ASTM-A351-CF8M A",
+      "count": 10
+    },
+    {
+      "value": "B584 Bronze",
+      "count": 10
+    },
+    {
+      "value": "Brass - C37700",
+      "count": 10
+    },
+    {
+      "value": "Cast Steel, Trim 8",
+      "count": 10
+    },
+    {
+      "value": "ASTM A216-WCB",
+      "count": 9
+    },
+    {
+      "value": "B584 C84400 Bronze Alloy",
+      "count": 9
+    },
+    {
+      "value": "B62-C83600",
+      "count": 9
+    },
+    {
+      "value": "Cast Steel",
+      "count": 9
+    },
+    {
+      "value": "Cast Steel Body",
+      "count": 9
+    },
+    {
+      "value": "Chrome Plated Brass CW617N",
+      "count": 9
+    },
+    {
+      "value": "ASTM A351 CF8M",
+      "count": 8
+    },
+    {
+      "value": "B584-C84400 Bronze",
+      "count": 8
+    },
+    {
+      "value": "Brass/Bronze",
+      "count": 8
+    },
+    {
+      "value": "Dezinctification Resistant Brass Alloy",
+      "count": 8
+    },
+    {
+      "value": "Valve Body: Plastic Nylon (PA66)",
+      "count": 8
+    },
+    {
+      "value": "2D Series Valve Body: Brass",
+      "count": 7
+    },
+    {
+      "value": "Black Iron",
+      "count": 7
+    },
+    {
+      "value": "Galvanized Iron",
+      "count": 7
+    },
+    {
+      "value": "A351 CF8M",
+      "count": 6
+    },
+    {
+      "value": "A351-CF8M",
+      "count": 6
+    },
+    {
+      "value": "Nickel Plated Brass",
+      "count": 6
+    },
+    {
+      "value": "2V Series Valve Body: Brass",
+      "count": 5
+    },
+    {
+      "value": "304",
+      "count": 5
+    },
+    {
+      "value": "85 psi",
+      "count": 5
+    },
+    {
+      "value": "Diecast Aluminum Alloy, Irridite and Baked Epoxy Finish",
+      "count": 5
+    },
+    {
+      "value": "Lead-Free Brass C27453",
+      "count": 4
+    },
+    {
+      "value": "Nickel Plated",
+      "count": 4
+    },
+    {
+      "value": "Valve Body: Engineered Nylon Plastic (PA66)",
+      "count": 4
+    },
+    {
+      "value": "Valve Body: PTFE (Teflon)",
+      "count": 4
+    },
+    {
+      "value": "Black Composite",
+      "count": 3
+    },
+    {
+      "value": "Valve Body: Delrin Plastic (Customizable to any plastic)",
+      "count": 3
+    },
+    {
+      "value": "Brass /Nickel Plated",
+      "count": 2
+    },
+    {
+      "value": "Dezincification Resistant Brass",
+      "count": 2
+    },
+    {
+      "value": "POLYPRO",
+      "count": 2
+    },
+    {
+      "value": "PVC-ACRYLIC",
+      "count": 2
+    },
+    {
+      "value": "PVDF",
+      "count": 2
+    },
+    {
+      "value": "Valve Body: Engineered Ecetal Plastic (Delrin POM)",
+      "count": 2
+    }
+  ],
+  "pressure_class": [
+    {
+      "value": "800",
+      "count": 46
+    }
+  ],
+  "end_connection_inlet": [
+    {
+      "value": "Screwed/Threaded",
+      "count": 1559
+    },
+    {
+      "value": "Flanged",
+      "count": 971
+    },
+    {
+      "value": "Socket Welded",
+      "count": 453
+    },
+    {
+      "value": "NPT",
+      "count": 394
+    },
+    {
+      "value": "Butt Welded",
+      "count": 256
+    },
+    {
+      "value": "150# Flange",
+      "count": 165
+    },
+    {
+      "value": "Solder",
+      "count": 165
+    },
+    {
+      "value": "Clamp",
+      "count": 131
+    },
+    {
+      "value": "N/A",
+      "count": 112
+    },
+    {
+      "value": "Socket",
+      "count": 96
+    },
+    {
+      "value": "Clamp x Female NPT",
+      "count": 80
+    },
+    {
+      "value": "NPT and Socket Ends Included",
+      "count": 74
+    },
+    {
+      "value": "Flange",
+      "count": 54
+    },
+    {
+      "value": "Press Connection",
+      "count": 50
+    },
+    {
+      "value": "Clamp x Male NPT",
+      "count": 49
+    },
+    {
+      "value": "Clamp x MNPT",
+      "count": 41
+    },
+    {
+      "value": "Tri-Clamp",
+      "count": 36
+    },
+    {
+      "value": "NPT to ASME B1.20.1",
+      "count": 34
+    },
+    {
+      "value": "Pressfit",
+      "count": 32
+    },
+    {
+      "value": "MNPT x FNPT",
+      "count": 29
+    },
+    {
+      "value": "Solvent Connection",
+      "count": 24
+    },
+    {
+      "value": "Expansion Pex",
+      "count": 22
+    },
+    {
+      "value": "Copper Stub",
+      "count": 21
+    },
+    {
+      "value": "Compression Ends with Heat Treated Ferrules",
+      "count": 20
+    },
+    {
+      "value": "FIP",
+      "count": 20
+    },
+    {
+      "value": "FIP x FIP",
+      "count": 19
+    },
+    {
+      "value": "Grooved Joint",
+      "count": 18
+    },
+    {
+      "value": "Solder Ends",
+      "count": 18
+    },
+    {
+      "value": "Clamp x Clamp",
+      "count": 17
+    },
+    {
+      "value": "Crimp Pex",
+      "count": 17
+    },
+    {
+      "value": "Sanitary Clamp",
+      "count": 14
+    },
+    {
+      "value": "Soldered Ends",
+      "count": 14
+    },
+    {
+      "value": "FIP x MIP",
+      "count": 13
+    },
+    {
+      "value": "FL x FL",
+      "count": 13
+    },
+    {
+      "value": "ASME Tri-Clamp, others consult factory",
+      "count": 12
+    },
+    {
+      "value": "Conduit",
+      "count": 10
+    },
+    {
+      "value": "Extended Tube OD",
+      "count": 10
+    },
+    {
+      "value": "Compression",
+      "count": 8
+    },
+    {
+      "value": "CPVC",
+      "count": 8
+    },
+    {
+      "value": "Integrated Dielectric Union",
+      "count": 8
+    },
+    {
+      "value": "Push-Fit",
+      "count": 8
+    },
+    {
+      "value": "Solder X Crimp Pex",
+      "count": 8
+    },
+    {
+      "value": "FIP x FL",
+      "count": 7
+    },
+    {
+      "value": "Solder End",
+      "count": 7
+    },
+    {
+      "value": "Soldered Double Union End",
+      "count": 7
+    },
+    {
+      "value": "Compression Fitting",
+      "count": 6
+    },
+    {
+      "value": "FNPT X Crimp Pex",
+      "count": 6
+    },
+    {
+      "value": "FNPT X Expansion Pex",
+      "count": 6
+    },
+    {
+      "value": "Press x 3/4\" Hose Connection",
+      "count": 6
+    },
+    {
+      "value": "ANSI Flange",
+      "count": 5
+    },
+    {
+      "value": "DIN Connector",
+      "count": 5
+    },
+    {
+      "value": "MIP x Push Fit",
+      "count": 5
+    },
+    {
+      "value": "SAE Male Flare",
+      "count": 5
+    },
+    {
+      "value": "Solder X Expansion Pex",
+      "count": 5
+    },
+    {
+      "value": "Female NPT",
+      "count": 4
+    },
+    {
+      "value": "Male NPT",
+      "count": 4
+    },
+    {
+      "value": "Press X Crimp Pex",
+      "count": 4
+    },
+    {
+      "value": "Press X Expansion Pex",
+      "count": 4
+    },
+    {
+      "value": "Press XLC",
+      "count": 4
+    },
+    {
+      "value": "Pressfit x FIP",
+      "count": 4
+    },
+    {
+      "value": "Pressfit x MIP",
+      "count": 4
+    },
+    {
+      "value": "FIP/Flare",
+      "count": 3
+    },
+    {
+      "value": "FNPT x 3/4\" Hose Connection",
+      "count": 3
+    },
+    {
+      "value": "FNPT x Solder",
+      "count": 3
+    },
+    {
+      "value": "Solder x 3/4\" Hose Connection",
+      "count": 3
+    },
+    {
+      "value": "FIP x MIP / FIP x FIP",
+      "count": 2
+    },
+    {
+      "value": "FIP x MIP, FIP x FIP",
+      "count": 2
+    },
+    {
+      "value": "FIP/Solder/Press",
+      "count": 2
+    },
+    {
+      "value": "FNPT x MNPT",
+      "count": 2
+    },
+    {
+      "value": "Male/Female NPT, SAE Male/Female Flare",
+      "count": 2
+    },
+    {
+      "value": "MIP x FL",
+      "count": 2
+    },
+    {
+      "value": "MNPT X Crimp Pex",
+      "count": 2
+    },
+    {
+      "value": "MNPT X Expansion Pex",
+      "count": 2
+    },
+    {
+      "value": "SAE Female Flare",
+      "count": 2
+    },
+    {
+      "value": "Solder x FIP",
+      "count": 2
+    },
+    {
+      "value": "and Material:",
+      "count": 1
+    },
+    {
+      "value": "Crimp PEX",
+      "count": 1
+    },
+    {
+      "value": "Expansion PEX",
+      "count": 1
+    },
+    {
+      "value": "FIP/Flare/MIP",
+      "count": 1
+    },
+    {
+      "value": "FL x FIP",
+      "count": 1
+    },
+    {
+      "value": "FL x MIP",
+      "count": 1
+    },
+    {
+      "value": "FNPT",
+      "count": 1
+    },
+    {
+      "value": "FNPT x MNPT / FNPT",
+      "count": 1
+    },
+    {
+      "value": "MIP/FIP/Flare",
+      "count": 1
+    },
+    {
+      "value": "Press x FIP",
+      "count": 1
+    },
+    {
+      "value": "Square Flange x Square Flange",
+      "count": 1
+    }
+  ],
+  "end_connection_outlet": [
+    {
+      "value": "Screwed/Threaded",
+      "count": 1559
+    },
+    {
+      "value": "Flanged",
+      "count": 971
+    },
+    {
+      "value": "Socket Welded",
+      "count": 453
+    },
+    {
+      "value": "NPT",
+      "count": 394
+    },
+    {
+      "value": "Butt Welded",
+      "count": 256
+    },
+    {
+      "value": "150# Flange",
+      "count": 165
+    },
+    {
+      "value": "Solder",
+      "count": 165
+    },
+    {
+      "value": "Clamp",
+      "count": 131
+    },
+    {
+      "value": "N/A",
+      "count": 112
+    },
+    {
+      "value": "Socket",
+      "count": 96
+    },
+    {
+      "value": "Clamp x Female NPT",
+      "count": 80
+    },
+    {
+      "value": "NPT and Socket Ends Included",
+      "count": 74
+    },
+    {
+      "value": "Flange",
+      "count": 54
+    },
+    {
+      "value": "Press Connection",
+      "count": 50
+    },
+    {
+      "value": "Clamp x Male NPT",
+      "count": 49
+    },
+    {
+      "value": "Clamp x MNPT",
+      "count": 41
+    },
+    {
+      "value": "Tri-Clamp",
+      "count": 36
+    },
+    {
+      "value": "NPT to ASME B1.20.1",
+      "count": 34
+    },
+    {
+      "value": "Pressfit",
+      "count": 32
+    },
+    {
+      "value": "MNPT x FNPT",
+      "count": 29
+    },
+    {
+      "value": "Solvent Connection",
+      "count": 24
+    },
+    {
+      "value": "Expansion Pex",
+      "count": 22
+    },
+    {
+      "value": "Copper Stub",
+      "count": 21
+    },
+    {
+      "value": "Compression Ends with Heat Treated Ferrules",
+      "count": 20
+    },
+    {
+      "value": "FIP",
+      "count": 20
+    },
+    {
+      "value": "FIP x FIP",
+      "count": 19
+    },
+    {
+      "value": "Grooved Joint",
+      "count": 18
+    },
+    {
+      "value": "Solder Ends",
+      "count": 18
+    },
+    {
+      "value": "Clamp x Clamp",
+      "count": 17
+    },
+    {
+      "value": "Crimp Pex",
+      "count": 17
+    },
+    {
+      "value": "Sanitary Clamp",
+      "count": 14
+    },
+    {
+      "value": "Soldered Ends",
+      "count": 14
+    },
+    {
+      "value": "FIP x MIP",
+      "count": 13
+    },
+    {
+      "value": "FL x FL",
+      "count": 13
+    },
+    {
+      "value": "ASME Tri-Clamp, others consult factory",
+      "count": 12
+    },
+    {
+      "value": "Conduit",
+      "count": 10
+    },
+    {
+      "value": "Extended Tube OD",
+      "count": 10
+    },
+    {
+      "value": "Compression",
+      "count": 8
+    },
+    {
+      "value": "CPVC",
+      "count": 8
+    },
+    {
+      "value": "Integrated Dielectric Union",
+      "count": 8
+    },
+    {
+      "value": "Push-Fit",
+      "count": 8
+    },
+    {
+      "value": "Solder X Crimp Pex",
+      "count": 8
+    },
+    {
+      "value": "FIP x FL",
+      "count": 7
+    },
+    {
+      "value": "Solder End",
+      "count": 7
+    },
+    {
+      "value": "Soldered Double Union End",
+      "count": 7
+    },
+    {
+      "value": "Compression Fitting",
+      "count": 6
+    },
+    {
+      "value": "FNPT X Crimp Pex",
+      "count": 6
+    },
+    {
+      "value": "FNPT X Expansion Pex",
+      "count": 6
+    },
+    {
+      "value": "Press x 3/4\" Hose Connection",
+      "count": 6
+    },
+    {
+      "value": "ANSI Flange",
+      "count": 5
+    },
+    {
+      "value": "DIN Connector",
+      "count": 5
+    },
+    {
+      "value": "MIP x Push Fit",
+      "count": 5
+    },
+    {
+      "value": "SAE Male Flare",
+      "count": 5
+    },
+    {
+      "value": "Solder X Expansion Pex",
+      "count": 5
+    },
+    {
+      "value": "Female NPT",
+      "count": 4
+    },
+    {
+      "value": "Male NPT",
+      "count": 4
+    },
+    {
+      "value": "Press X Crimp Pex",
+      "count": 4
+    },
+    {
+      "value": "Press X Expansion Pex",
+      "count": 4
+    },
+    {
+      "value": "Press XLC",
+      "count": 4
+    },
+    {
+      "value": "Pressfit x FIP",
+      "count": 4
+    },
+    {
+      "value": "Pressfit x MIP",
+      "count": 4
+    },
+    {
+      "value": "FIP/Flare",
+      "count": 3
+    },
+    {
+      "value": "FNPT x 3/4\" Hose Connection",
+      "count": 3
+    },
+    {
+      "value": "FNPT x Solder",
+      "count": 3
+    },
+    {
+      "value": "Solder x 3/4\" Hose Connection",
+      "count": 3
+    },
+    {
+      "value": "FIP x MIP / FIP x FIP",
+      "count": 2
+    },
+    {
+      "value": "FIP x MIP, FIP x FIP",
+      "count": 2
+    },
+    {
+      "value": "FIP/Solder/Press",
+      "count": 2
+    },
+    {
+      "value": "FNPT x MNPT",
+      "count": 2
+    },
+    {
+      "value": "Male/Female NPT, SAE Male/Female Flare",
+      "count": 2
+    },
+    {
+      "value": "MIP x FL",
+      "count": 2
+    },
+    {
+      "value": "MNPT X Crimp Pex",
+      "count": 2
+    },
+    {
+      "value": "MNPT X Expansion Pex",
+      "count": 2
+    },
+    {
+      "value": "SAE Female Flare",
+      "count": 2
+    },
+    {
+      "value": "Solder x FIP",
+      "count": 2
+    },
+    {
+      "value": "and Material:",
+      "count": 1
+    },
+    {
+      "value": "Crimp PEX",
+      "count": 1
+    },
+    {
+      "value": "Expansion PEX",
+      "count": 1
+    },
+    {
+      "value": "FIP/Flare/MIP",
+      "count": 1
+    },
+    {
+      "value": "FL x FIP",
+      "count": 1
+    },
+    {
+      "value": "FL x MIP",
+      "count": 1
+    },
+    {
+      "value": "FNPT",
+      "count": 1
+    },
+    {
+      "value": "FNPT x MNPT / FNPT",
+      "count": 1
+    },
+    {
+      "value": "MIP/FIP/Flare",
+      "count": 1
+    },
+    {
+      "value": "Press x FIP",
+      "count": 1
+    },
+    {
+      "value": "Square Flange x Square Flange",
+      "count": 1
+    }
+  ]
+}
