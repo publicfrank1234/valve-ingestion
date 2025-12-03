@@ -344,6 +344,190 @@ def list_cache():
         }), 500
 
 
+# ============================================================================
+# Job-Specific Results Endpoints (for incremental streaming)
+# ============================================================================
+
+@app.route('/job/<path:job_id>/results', methods=['GET'])
+def get_job_results(job_id):
+    """Get accumulated results for a specific job."""
+    if not redis_client:
+        return jsonify({
+            "success": False,
+            "error": "Redis not available"
+        }), 503
+    
+    try:
+        # Decode URL-encoded job_id
+        decoded_job_id = unquote(job_id)
+        redis_key = f"job_{decoded_job_id}_results"
+        
+        # Get results from Redis
+        value = redis_client.get(redis_key)
+        
+        if value is None:
+            return jsonify({
+                "success": True,
+                "found": False,
+                "jobId": decoded_job_id,
+                "results": []
+            })
+        
+        # Parse JSON value
+        try:
+            data = json.loads(value)
+            # Ensure it's an array
+            if isinstance(data, list):
+                results = data
+            elif isinstance(data, dict) and 'results' in data:
+                results = data['results']
+            else:
+                results = [data]
+            
+            return jsonify({
+                "success": True,
+                "found": True,
+                "jobId": decoded_job_id,
+                "results": results,
+                "count": len(results)
+            })
+        except json.JSONDecodeError:
+            return jsonify({
+                "success": False,
+                "error": "Invalid JSON in cache"
+            }), 500
+    
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+@app.route('/job/<path:job_id>/results', methods=['POST', 'PUT'])
+def merge_job_result(job_id):
+    """Add or update a result in the job's accumulated results."""
+    if not redis_client:
+        return jsonify({
+            "success": False,
+            "error": "Redis not available"
+        }), 503
+    
+    try:
+        data = request.get_json() or {}
+        
+        # Decode URL-encoded job_id
+        decoded_job_id = unquote(job_id)
+        redis_key = f"job_{decoded_job_id}_results"
+        
+        # Get new result from request
+        new_result = data.get('result', data)  # Support both {result: {...}} and direct {...}
+        
+        if not isinstance(new_result, dict):
+            return jsonify({
+                "success": False,
+                "error": "Result must be an object"
+            }), 400
+        
+        # Get existing results from Redis
+        existing_results = []
+        value = redis_client.get(redis_key)
+        if value:
+            try:
+                parsed = json.loads(value)
+                if isinstance(parsed, list):
+                    existing_results = parsed
+                elif isinstance(parsed, dict) and 'results' in parsed:
+                    existing_results = parsed['results']
+                else:
+                    existing_results = [parsed]
+            except json.JSONDecodeError:
+                existing_results = []
+        
+        # Merge logic: update if rowIndex exists, append if new
+        new_row_index = new_result.get('rowIndex')
+        if new_row_index is not None:
+            # Find existing result with same rowIndex
+            existing_index = -1
+            for i, result in enumerate(existing_results):
+                if result.get('rowIndex') == new_row_index:
+                    existing_index = i
+                    break
+            
+            if existing_index >= 0:
+                # Update existing result
+                existing_results[existing_index] = new_result
+            else:
+                # Append new result
+                existing_results.append(new_result)
+        else:
+            # No rowIndex, just append
+            existing_results.append(new_result)
+        
+        # Sort by rowIndex to maintain order
+        existing_results.sort(key=lambda r: r.get('rowIndex', 999999))
+        
+        # Get TTL from request (optional, default 24 hours for job results)
+        ttl = data.get('ttl', 86400)  # Default: 24 hours
+        
+        # Store merged results back to Redis
+        value = json.dumps(existing_results)
+        redis_client.setex(redis_key, ttl, value)
+        
+        # Calculate summary
+        matched_count = sum(1 for r in existing_results if r.get('bestMatch') or r.get('ValveMan_URL'))
+        unmatched_count = len(existing_results) - matched_count
+        
+        return jsonify({
+            "success": True,
+            "jobId": decoded_job_id,
+            "results": existing_results,
+            "count": len(existing_results),
+            "summary": {
+                "totalRows": len(existing_results),
+                "matchedRows": matched_count,
+                "unmatchedRows": unmatched_count
+            },
+            "ttl": ttl,
+            "message": "Result merged successfully"
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+@app.route('/job/<path:job_id>/results', methods=['DELETE'])
+def clear_job_results(job_id):
+    """Clear all results for a specific job."""
+    if not redis_client:
+        return jsonify({
+            "success": False,
+            "error": "Redis not available"
+        }), 503
+    
+    try:
+        # Decode URL-encoded job_id
+        decoded_job_id = unquote(job_id)
+        redis_key = f"job_{decoded_job_id}_results"
+        
+        deleted = redis_client.delete(redis_key)
+        
+        return jsonify({
+            "success": True,
+            "jobId": decoded_job_id,
+            "deleted": deleted > 0
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 6000))
     app.run(host='0.0.0.0', port=port, debug=True)
