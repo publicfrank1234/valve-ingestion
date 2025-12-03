@@ -406,7 +406,12 @@ def get_job_results(job_id):
 
 @app.route('/job/<path:job_id>/results', methods=['POST', 'PUT'])
 def merge_job_result(job_id):
-    """Add or update a result in the job's accumulated results."""
+    """Add or update results in the job's accumulated results.
+    
+    Supports two modes:
+    1. POST with 'results' (array): Replace entire results array
+    2. POST with 'result' (object): Merge single result into existing array
+    """
     if not redis_client:
         return jsonify({
             "success": False,
@@ -420,55 +425,64 @@ def merge_job_result(job_id):
         decoded_job_id = unquote(job_id)
         redis_key = f"job_{decoded_job_id}_results"
         
-        # Get new result from request
-        new_result = data.get('result', data)  # Support both {result: {...}} and direct {...}
+        # Get TTL from request (optional, default 24 hours for job results)
+        ttl = data.get('ttl', 86400)  # Default: 24 hours
         
-        if not isinstance(new_result, dict):
-            return jsonify({
-                "success": False,
-                "error": "Result must be an object"
-            }), 400
-        
-        # Get existing results from Redis
-        existing_results = []
-        value = redis_client.get(redis_key)
-        if value:
-            try:
-                parsed = json.loads(value)
-                if isinstance(parsed, list):
-                    existing_results = parsed
-                elif isinstance(parsed, dict) and 'results' in parsed:
-                    existing_results = parsed['results']
-                else:
-                    existing_results = [parsed]
-            except json.JSONDecodeError:
-                existing_results = []
-        
-        # Merge logic: update if rowIndex exists, append if new
-        new_row_index = new_result.get('rowIndex')
-        if new_row_index is not None:
-            # Find existing result with same rowIndex
-            existing_index = -1
-            for i, result in enumerate(existing_results):
-                if result.get('rowIndex') == new_row_index:
-                    existing_index = i
-                    break
-            
-            if existing_index >= 0:
-                # Update existing result
-                existing_results[existing_index] = new_result
-            else:
-                # Append new result
-                existing_results.append(new_result)
+        # Check if we're replacing the entire array or merging a single result
+        if 'results' in data and isinstance(data['results'], list):
+            # MODE 1: Replace entire results array (n8n sends merged array)
+            existing_results = data['results']
+            print(f"📦 Replacing entire results array with {len(existing_results)} items")
         else:
-            # No rowIndex, just append
-            existing_results.append(new_result)
+            # MODE 2: Merge single result (backward compatibility)
+            new_result = data.get('result', data)  # Support both {result: {...}} and direct {...}
+            
+            if not isinstance(new_result, dict):
+                return jsonify({
+                    "success": False,
+                    "error": "Result must be an object"
+                }), 400
+            
+            # Get existing results from Redis
+            existing_results = []
+            value = redis_client.get(redis_key)
+            if value:
+                try:
+                    parsed = json.loads(value)
+                    if isinstance(parsed, list):
+                        existing_results = parsed
+                    elif isinstance(parsed, dict) and 'results' in parsed:
+                        existing_results = parsed['results']
+                    else:
+                        existing_results = [parsed]
+                except json.JSONDecodeError:
+                    existing_results = []
+            
+            # Merge logic: update if rowIndex exists, append if new
+            new_row_index = new_result.get('rowIndex')
+            if new_row_index is not None:
+                # Find existing result with same rowIndex
+                existing_index = -1
+                for i, result in enumerate(existing_results):
+                    if result.get('rowIndex') == new_row_index:
+                        existing_index = i
+                        break
+                
+                if existing_index >= 0:
+                    # Update existing result
+                    existing_results[existing_index] = new_result
+                    print(f"🔄 Updated existing result at index {existing_index} (rowIndex: {new_row_index})")
+                else:
+                    # Append new result
+                    existing_results.append(new_result)
+                    print(f"➕ Added new result (rowIndex: {new_row_index}, total: {len(existing_results)})")
+            else:
+                # No rowIndex, just append
+                existing_results.append(new_result)
+                print(f"➕ Added new result (no rowIndex, total: {len(existing_results)})")
         
         # Sort by rowIndex to maintain order
         existing_results.sort(key=lambda r: r.get('rowIndex', 999999))
-        
-        # Get TTL from request (optional, default 24 hours for job results)
-        ttl = data.get('ttl', 86400)  # Default: 24 hours
         
         # Store merged results back to Redis
         value = json.dumps(existing_results)
@@ -489,7 +503,7 @@ def merge_job_result(job_id):
                 "unmatchedRows": unmatched_count
             },
             "ttl": ttl,
-            "message": "Result merged successfully"
+            "message": "Results stored successfully"
         })
     
     except Exception as e:
