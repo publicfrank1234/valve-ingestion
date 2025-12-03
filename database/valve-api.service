@@ -1,0 +1,29 @@
+[Unit]
+Description=Valve Spec API Server (with Redis Cache)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/path/to/valve-spec-ingestion/database
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PORT=6000"
+Environment="REDIS_URL=redis://default:NPTICUxXh921HLMvIhNvAXrUY9YyAR9f@redis-14604.c85.us-east-1-2.ec2.cloud.redislabs.com:14604"
+# Database connection (set these or use .env file)
+# Environment="DATABASE_URL=postgresql://postgres:password@db.deaohsesihodomvhqlxe.supabase.co:5432/postgres"
+# OR
+# Environment="DB_HOST=db.deaohsesihodomvhqlxe.supabase.co"
+# Environment="DB_PORT=5432"
+# Environment="DB_NAME=postgres"
+# Environment="DB_USER=postgres"
+# Environment="DB_PASSWORD=your-password"
+# Environment="DB_SSLMODE=require"
+ExecStart=/usr/bin/python3 /path/to/valve-spec-ingestion/database/database_api.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/path/to/valve-spec-ingestion/database/api_server.log
+StandardError=append:/path/to/valve-spec-ingestion/database/api_server.log
+
+[Install]
+WantedBy=multi-user.target
+
