@@ -7,3 +7,8 @@ lxml>=4.9.0
 psycopg2-binary>=2.9.0
 python-dotenv>=1.0.0
 
+# API Server
+flask>=2.3.0
+flask-cors>=4.0.0
+redis>=5.0.0
+

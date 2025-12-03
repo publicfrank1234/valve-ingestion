@@ -76,3 +76,6 @@ print("4. Copy the 'Session mode' connection string")
 print("5. Update .env file with the correct pooler hostname")
 print("=" * 60)
 
+
+
+

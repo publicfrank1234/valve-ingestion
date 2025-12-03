@@ -214,3 +214,6 @@ curl -X POST http://localhost:5000/search/normalized \
 - Check firewall/security groups allow port 5000
 - If on different servers, use full URL: `http://52.10.49.140:5000/search/normalized`
 
+
+
+

@@ -135,3 +135,6 @@ SELECT
     COUNT(*) - COUNT(end_connection_outlet)
 FROM valve_specs;
 
+
+
+

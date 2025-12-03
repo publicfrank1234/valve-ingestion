@@ -9,8 +9,17 @@ cd "$SCRIPT_DIR"
 PORT=${PORT:-6000}
 LOG_FILE="${SCRIPT_DIR}/api_server.log"
 PID_FILE="${SCRIPT_DIR}/api_server.pid"
-PYTHON_CMD="python3"
 API_SCRIPT="database_api.py"
+
+# Check for virtual environment (from parent directory setup.sh)
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+if [ -d "${PARENT_DIR}/venv" ]; then
+    PYTHON_CMD="${PARENT_DIR}/venv/bin/python"
+    echo "Using virtual environment: ${PARENT_DIR}/venv"
+else
+    PYTHON_CMD="python3"
+    echo "Using system Python (no venv found)"
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -82,8 +91,11 @@ start_server() {
     fi
 
     # Load environment variables from .env if it exists
-    if [ -f .env ]; then
-        export $(cat .env | grep -v '^#' | xargs)
+    # Try current directory first, then parent directory
+    if [ -f "${SCRIPT_DIR}/.env" ]; then
+        export $(cat "${SCRIPT_DIR}/.env" | grep -v '^#' | xargs)
+    elif [ -f "${PARENT_DIR}/.env" ]; then
+        export $(cat "${PARENT_DIR}/.env" | grep -v '^#' | xargs)
     fi
 
     echo -e "${YELLOW}Starting API server on port $PORT...${NC}"
