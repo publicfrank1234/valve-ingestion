@@ -88,7 +88,7 @@ def search_specs(
     body_material: Optional[str] = None,
     pressure_class: Optional[str] = None,
     end_connection: Optional[str] = None,
-    max_results: int = 10,
+    max_results: int = 100,
     make_end_connection_optional: bool = True
 ) -> List[Dict[str, Any]]:
     """
@@ -105,6 +105,9 @@ def search_specs(
     Returns:
         List of matching valve specs as dictionaries
     """
+    # Cap max_results to prevent excessive queries (safety limit)
+    max_results = min(max_results, 1000) if max_results > 0 else 100
+    
     conn = None
     cursor = None
     try:
@@ -313,30 +316,36 @@ def search_specs(
         # Build query
         where_clause = " AND ".join(conditions) if conditions else "1=1"
         
+        # Use DISTINCT ON to deduplicate by spec_sheet_url (or source_url if spec_sheet_url is NULL)
+        # This ensures we only return one result per unique link
+        # Then order final results by extracted_at DESC to get most recent first
         query = f"""
-            SELECT 
-                id,
-                source_url,
-                spec_sheet_url,
-                sku,
-                valve_type,
-                size_nominal,
-                body_material,
-                max_pressure,
-                pressure_unit,
-                pressure_class,
-                max_temperature,
-                temperature_unit,
-                end_connection_inlet,
-                end_connection_outlet,
-                starting_price,
-                msrp,
-                savings,
-                spec,
-                price_info,
-                extracted_at
-            FROM valve_specs
-            WHERE {where_clause}
+            SELECT * FROM (
+                SELECT DISTINCT ON (COALESCE(spec_sheet_url, source_url))
+                    id,
+                    source_url,
+                    spec_sheet_url,
+                    sku,
+                    valve_type,
+                    size_nominal,
+                    body_material,
+                    max_pressure,
+                    pressure_unit,
+                    pressure_class,
+                    max_temperature,
+                    temperature_unit,
+                    end_connection_inlet,
+                    end_connection_outlet,
+                    starting_price,
+                    msrp,
+                    savings,
+                    spec,
+                    price_info,
+                    extracted_at
+                FROM valve_specs
+                WHERE {where_clause}
+                ORDER BY COALESCE(spec_sheet_url, source_url), extracted_at DESC
+            ) AS deduplicated
             ORDER BY extracted_at DESC
             LIMIT %s
         """
@@ -374,29 +383,32 @@ def search_specs(
                 
                 where_clause_without_end = " AND ".join(conditions_without_end_copy) if conditions_without_end_copy else "1=1"
                 query_without_end = f"""
-                    SELECT 
-                        id,
-                        source_url,
-                        spec_sheet_url,
-                        sku,
-                        valve_type,
-                        size_nominal,
-                        body_material,
-                        max_pressure,
-                        pressure_unit,
-                        pressure_class,
-                        max_temperature,
-                        temperature_unit,
-                        end_connection_inlet,
-                        end_connection_outlet,
-                        starting_price,
-                        msrp,
-                        savings,
-                        spec,
-                        price_info,
-                        extracted_at
-                    FROM valve_specs
-                    WHERE {where_clause_without_end}
+                    SELECT * FROM (
+                        SELECT DISTINCT ON (COALESCE(spec_sheet_url, source_url))
+                            id,
+                            source_url,
+                            spec_sheet_url,
+                            sku,
+                            valve_type,
+                            size_nominal,
+                            body_material,
+                            max_pressure,
+                            pressure_unit,
+                            pressure_class,
+                            max_temperature,
+                            temperature_unit,
+                            end_connection_inlet,
+                            end_connection_outlet,
+                            starting_price,
+                            msrp,
+                            savings,
+                            spec,
+                            price_info,
+                            extracted_at
+                        FROM valve_specs
+                        WHERE {where_clause_without_end}
+                        ORDER BY COALESCE(spec_sheet_url, source_url), extracted_at DESC
+                    ) AS deduplicated
                     ORDER BY extracted_at DESC
                     LIMIT %s
                 """
@@ -420,7 +432,7 @@ def search_specs(
             except Exception:
                 pass
 
-def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_results: int = 10) -> List[Dict[str, Any]]:
+def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_results: int = 100) -> List[Dict[str, Any]]:
     """
     Search specs using normalized specification object.
     

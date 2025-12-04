@@ -111,7 +111,7 @@ def search():
             body_material=data.get('material') or data.get('body_material'),
             pressure_class=data.get('pressureRating') or data.get('pressure_class'),
             end_connection=data.get('endConnection') or data.get('end_connection'),
-            max_results=data.get('maxResults', 10)
+            max_results=data.get('maxResults', 100)
         )
         
         # Format results
