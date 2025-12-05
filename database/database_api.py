@@ -198,6 +198,73 @@ def search_normalized():
         }), 500
 
 
+@app.route('/valve/by-urls', methods=['POST'])
+def get_valves_by_urls():
+    """Fetch full valve specs by URLs. Takes array of sourceUrls and returns full details."""
+    try:
+        data = request.get_json() or {}
+        source_urls = data.get('sourceUrls') or data.get('source_urls') or []
+        
+        if not source_urls or not isinstance(source_urls, list):
+            return jsonify({
+                "success": False,
+                "error": "sourceUrls array is required"
+            }), 400
+        
+        # Fetch specs for each URL
+        from search_specs import get_specs_by_identifiers
+        all_results = []
+        for url in source_urls:
+            if url:  # Skip empty URLs
+                results = get_specs_by_identifiers(source_url=url)
+                all_results.extend(results)
+        
+        # Deduplicate by id (in case same URL appears multiple times)
+        seen_ids = set()
+        unique_results = []
+        for result in all_results:
+            result_id = result.get('id')
+            if result_id and result_id not in seen_ids:
+                seen_ids.add(result_id)
+                unique_results.append(result)
+        
+        # Format results (same format as /search/normalized)
+        formatted_results = []
+        for result in unique_results:
+            formatted_result = {
+                "id": result.get("id"),
+                "sourceUrl": result.get("source_url"),
+                "specSheetUrl": result.get("spec_sheet_url"),
+                "sku": result.get("sku"),
+                "valveType": result.get("valve_type"),
+                "size": result.get("size_nominal"),
+                "material": result.get("body_material"),
+                "pressureClass": result.get("pressure_class"),
+                "maxPressure": float(result.get("max_pressure")) if result.get("max_pressure") else None,
+                "pressureUnit": result.get("pressure_unit"),
+                "maxTemperature": float(result.get("max_temperature")) if result.get("max_temperature") else None,
+                "temperatureUnit": result.get("temperature_unit"),
+                "endConnection": result.get("end_connection_inlet") or result.get("end_connection_outlet"),
+                "price": float(result.get("starting_price")) if result.get("starting_price") else None,
+                "msrp": float(result.get("msrp")) if result.get("msrp") else None,
+                "spec": result.get("spec"),
+                "priceInfo": result.get("price_info")
+            }
+            formatted_results.append(formatted_result)
+        
+        return jsonify({
+            "success": True,
+            "count": len(formatted_results),
+            "results": formatted_results
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint."""

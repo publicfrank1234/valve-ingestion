@@ -457,6 +457,79 @@ def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_resul
         max_results=max_results
     )
 
+
+def get_specs_by_identifiers(source_url: Optional[str] = None, sku: Optional[str] = None, id: Optional[int] = None) -> List[Dict[str, Any]]:
+    """
+    Fetch valve specs by URL, SKU, or ID.
+    
+    Args:
+        source_url: Product URL (e.g., from ValveMan.com)
+        sku: Product SKU
+        id: Database ID
+    
+    Returns:
+        List of matching valve specs (usually 0 or 1 result)
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        
+        conditions = []
+        params = []
+        
+        if id:
+            conditions.append("id = %s")
+            params.append(id)
+        elif sku:
+            conditions.append("sku = %s")
+            params.append(sku)
+        elif source_url:
+            conditions.append("source_url = %s")
+            params.append(source_url)
+        else:
+            return []
+        
+        query = f"""
+            SELECT 
+                id,
+                source_url,
+                spec_sheet_url,
+                sku,
+                valve_type,
+                size_nominal,
+                body_material,
+                max_pressure,
+                pressure_unit,
+                pressure_class,
+                max_temperature,
+                temperature_unit,
+                end_connection_inlet,
+                end_connection_outlet,
+                starting_price,
+                msrp,
+                spec,
+                price_info
+            FROM valve_specs
+            WHERE {' AND '.join(conditions)}
+            LIMIT 10
+        """
+        
+        cursor.execute(query, params)
+        results = cursor.fetchall()
+        
+        return [dict(row) for row in results]
+    
+    except Exception as e:
+        print(f"Error fetching specs by identifiers: {e}")
+        return []
+    finally:
+        if conn:
+            try:
+                conn.close()
+            except Exception:
+                pass
+
 if __name__ == "__main__":
     # Test the search function
     import sys
