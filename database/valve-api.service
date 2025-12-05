@@ -7,7 +7,7 @@ Type=simple
 User=ubuntu
 WorkingDirectory=/path/to/valve-spec-ingestion/database
 Environment="PATH=/usr/bin:/usr/local/bin"
-Environment="PORT=6000"
+Environment="PORT=16000"
 Environment="REDIS_URL=redis://default:NPTICUxXh921HLMvIhNvAXrUY9YyAR9f@redis-14604.c85.us-east-1-2.ec2.cloud.redislabs.com:14604"
 # Database connection (set these or use .env file)
 # Environment="DATABASE_URL=postgresql://postgres:password@db.deaohsesihodomvhqlxe.supabase.co:5432/postgres"

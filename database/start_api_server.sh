@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 # Configuration
-PORT=${PORT:-6000}
+PORT=${PORT:-16000}
 LOG_FILE="${SCRIPT_DIR}/api_server.log"
 PID_FILE="${SCRIPT_DIR}/api_server.pid"
 API_SCRIPT="database_api.py"
