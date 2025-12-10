@@ -105,13 +105,15 @@ def search():
         data = request.get_json() or {}
         
         # Extract search parameters
+        # make_material_optional defaults to True - allows material mismatch when size and type match
         results = search_specs(
             valve_type=data.get('valveType') or data.get('valve_type'),
             size_nominal=data.get('size') or data.get('size_nominal'),
             body_material=data.get('material') or data.get('body_material'),
             pressure_class=data.get('pressureRating') or data.get('pressure_class'),
             end_connection=data.get('endConnection') or data.get('end_connection'),
-            max_results=data.get('maxResults', 100)
+            max_results=data.get('maxResults', 100),
+            make_material_optional=data.get('makeMaterialOptional', True)  # Default: relaxed material matching
         )
         
         # Format results
@@ -158,8 +160,10 @@ def search_normalized():
         data = request.get_json() or {}
         normalized_specs = data.get('normalizedSpecs', {})
         max_results = data.get('maxResults', 10)
+        # make_material_optional defaults to True - allows material mismatch when size and type match
+        make_material_optional = data.get('makeMaterialOptional', True)
         
-        results = search_specs_by_normalized_specs(normalized_specs, max_results)
+        results = search_specs_by_normalized_specs(normalized_specs, max_results, make_material_optional)
         
         # Format results
         formatted_results = []

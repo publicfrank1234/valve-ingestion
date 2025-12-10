@@ -89,7 +89,8 @@ def search_specs(
     pressure_class: Optional[str] = None,
     end_connection: Optional[str] = None,
     max_results: int = 100,
-    make_end_connection_optional: bool = True
+    make_end_connection_optional: bool = True,
+    make_material_optional: bool = True
 ) -> List[Dict[str, Any]]:
     """
     Search valve specs by various criteria.
@@ -416,6 +417,68 @@ def search_specs(
                 cursor.execute(query_without_end, params_without_end)
                 results = cursor.fetchall()
         
+        # If still no results and body_material was specified and make_material_optional is True,
+        # AND we have both size and type (critical specs that must match),
+        # try again without body_material requirement (relax material matching)
+        if len(results) == 0 and body_material and make_material_optional and size_nominal and valve_type:
+            # Remove material condition and try again
+            conditions_without_material = [c for c in conditions if "body_material" not in c]
+            if len(conditions_without_material) < len(conditions):
+                # Rebuild params without material params
+                params_without_material = []
+                conditions_without_material_copy = []
+                param_idx = 0
+                
+                for condition in conditions:
+                    if "body_material" not in condition:
+                        conditions_without_material_copy.append(condition)
+                        # Count placeholders in this condition
+                        placeholder_count = condition.count("%s")
+                        params_without_material.extend(params[param_idx:param_idx + placeholder_count])
+                        param_idx += placeholder_count
+                    else:
+                        # Skip material params
+                        placeholder_count = condition.count("%s")
+                        param_idx += placeholder_count
+                
+                # Add max_results param
+                params_without_material.append(max_results)
+                
+                where_clause_without_material = " AND ".join(conditions_without_material_copy) if conditions_without_material_copy else "1=1"
+                query_without_material = f"""
+                    SELECT * FROM (
+                        SELECT DISTINCT ON (COALESCE(spec_sheet_url, source_url))
+                            id,
+                            source_url,
+                            spec_sheet_url,
+                            sku,
+                            valve_type,
+                            size_nominal,
+                            body_material,
+                            max_pressure,
+                            pressure_unit,
+                            pressure_class,
+                            max_temperature,
+                            temperature_unit,
+                            end_connection_inlet,
+                            end_connection_outlet,
+                            starting_price,
+                            msrp,
+                            savings,
+                            spec,
+                            price_info,
+                            extracted_at
+                        FROM valve_specs
+                        WHERE {where_clause_without_material}
+                        ORDER BY COALESCE(spec_sheet_url, source_url), extracted_at DESC
+                    ) AS deduplicated
+                    ORDER BY extracted_at DESC
+                    LIMIT %s
+                """
+                
+                cursor.execute(query_without_material, params_without_material)
+                results = cursor.fetchall()
+        
         # Convert to list of dicts
         return [dict(row) for row in results]
         
@@ -432,7 +495,7 @@ def search_specs(
             except Exception:
                 pass
 
-def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_results: int = 100) -> List[Dict[str, Any]]:
+def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_results: int = 100, make_material_optional: bool = True) -> List[Dict[str, Any]]:
     """
     Search specs using normalized specification object.
     
@@ -444,6 +507,7 @@ def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_resul
             - pressureRating (or pressure_class)
             - endConnection (or end_connection)
         max_results: Maximum number of results
+        make_material_optional: If True, allows material mismatch when size and type match (default: True)
     
     Returns:
         List of matching valve specs
@@ -454,7 +518,8 @@ def search_specs_by_normalized_specs(normalized_specs: Dict[str, Any], max_resul
         body_material=normalized_specs.get('material') or normalized_specs.get('body_material'),
         pressure_class=normalized_specs.get('pressureRating') or normalized_specs.get('pressure_class'),
         end_connection=normalized_specs.get('endConnection') or normalized_specs.get('end_connection'),
-        max_results=max_results
+        max_results=max_results,
+        make_material_optional=make_material_optional
     )
 
 
