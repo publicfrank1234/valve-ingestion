@@ -163,6 +163,11 @@ def search_normalized():
         # make_material_optional defaults to True - allows material mismatch when size and type match
         make_material_optional = data.get('makeMaterialOptional', True)
         
+        print(f"🔍 API /search/normalized called:")
+        print(f"   - normalizedSpecs: {normalized_specs}")
+        print(f"   - makeMaterialOptional: {make_material_optional}")
+        print(f"   - maxResults: {max_results}")
+        
         results = search_specs_by_normalized_specs(normalized_specs, max_results, make_material_optional)
         
         # Format results

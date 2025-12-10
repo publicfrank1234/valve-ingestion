@@ -420,7 +420,16 @@ def search_specs(
         # If still no results and body_material was specified and make_material_optional is True,
         # AND we have both size and type (critical specs that must match),
         # try again without body_material requirement (relax material matching)
-        if len(results) == 0 and body_material and make_material_optional and size_nominal and valve_type:
+        print(f"🔍 Relaxed Material Search Check:")
+        print(f"   - Results count: {len(results)}")
+        print(f"   - body_material: {body_material}")
+        print(f"   - make_material_optional: {make_material_optional}")
+        
+        # If still no results and body_material was specified and make_material_optional is True,
+        # try again without body_material requirement (relax material matching)
+        # Simple logic: if no results, relax material (same as end_connection relaxation)
+        if len(results) == 0 and body_material and make_material_optional:
+            print(f"✅ RELAXED MATERIAL SEARCH: Retrying without material filter")
             # Remove material condition and try again
             conditions_without_material = [c for c in conditions if "body_material" not in c]
             if len(conditions_without_material) < len(conditions):
@@ -478,6 +487,16 @@ def search_specs(
                 
                 cursor.execute(query_without_material, params_without_material)
                 results = cursor.fetchall()
+                print(f"✅ RELAXED MATERIAL SEARCH: Found {len(results)} results without material filter")
+            else:
+                print(f"⚠️ RELAXED MATERIAL SEARCH: Material condition not found in conditions, skipping retry")
+        else:
+            if len(results) > 0:
+                print(f"ℹ️ RELAXED MATERIAL SEARCH: First search found {len(results)} results, no retry needed")
+            elif not body_material:
+                print(f"ℹ️ RELAXED MATERIAL SEARCH: No material specified, no retry needed")
+            elif not make_material_optional:
+                print(f"ℹ️ RELAXED MATERIAL SEARCH: make_material_optional is False, no retry")
         
         # Convert to list of dicts
         return [dict(row) for row in results]
