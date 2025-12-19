@@ -220,7 +220,7 @@ def search_jsonb_tiered(
     normalized_specs: Dict,
     component_type: Optional[str] = None,
     max_results: int = 10,
-    relax_constraints: bool = True
+    relax_constraints: bool = False  # Default to False - let LLM handle relaxation at application level
 ) -> List[Dict]:
     """
     Search products using tiered relaxation strategy.
@@ -284,52 +284,58 @@ def search_jsonb_tiered(
         params = []
         conditions = []
         
-        # Size match - use aliased columns from UNION query
+        # Size match - EXACT match only (no partial matching to avoid "16" matching "6")
         if size:
+            # Normalize the search size (remove quotes for comparison)
+            size_normalized = normalize_size(size)
+            # Match exact: "6", "6"", or '"6"'
             conditions.append("""
-                (size = %s OR size ILIKE %s)
+                (size = %s OR size = %s OR size = %s)
             """)
-            params.extend([size, f'%{size}%'])
+            params.extend([
+                size_normalized,  # "6"
+                f'{size_normalized}"',  # "6""
+                f'"{size_normalized}"'  # '"6"'
+            ])
         
-        # Valve type match - use aliased columns from UNION query
+        # Valve type match - exact or contains (for flexibility with valve type names)
         if valve_type:
             conditions.append("""
                 (item ILIKE %s OR component_type ILIKE %s)
             """)
             params.extend([f'%{valve_type}%', f'%{valve_type}%'])
         
-        # Pressure match - use aliased columns from UNION query
+        # Pressure match - exact match on pressure number
         if pressure:
             pressure_num = extract_pressure_number(pressure)
             if pressure_num:
                 conditions.append("""
-                    (CAST(REGEXP_REPLACE(COALESCE(pressure_rating, pressure_class, ''), '[^0-9]', '', 'g') AS INTEGER) >= %s
-                     OR pressure_class ILIKE %s)
+                    (CAST(REGEXP_REPLACE(COALESCE(pressure_rating, pressure_class, ''), '[^0-9]', '', 'g') AS INTEGER) = %s)
                 """)
-                params.extend([pressure_num, f'%{pressure_num}%'])
+                params.extend([pressure_num])
         
-        # Material match - use aliased columns from UNION query
+        # Material match - exact match (case-insensitive)
         if material:
             conditions.append("""
-                (body_material ILIKE %s)
+                (LOWER(body_material) = LOWER(%s))
             """)
-            params.extend([f'%{material}%'])
+            params.extend([material])
         
-        # Seat material match - use aliased columns from UNION query
+        # Seat material match - exact match (case-insensitive)
         if seat_material:
             conditions.append("""
-                (seat_material ILIKE %s)
+                (LOWER(seat_material) = LOWER(%s))
             """)
-            params.extend([f'%{seat_material}%'])
+            params.extend([seat_material])
         
-        # Connection match - use aliased columns from UNION query
+        # Connection match - exact match (case-insensitive)
         if connection:
             conditions.append("""
-                (connection_type ILIKE %s 
-                 OR end_connection ILIKE %s
-                 OR body_style ILIKE %s)
+                (LOWER(connection_type) = LOWER(%s)
+                 OR LOWER(end_connection) = LOWER(%s)
+                 OR LOWER(body_style) = LOWER(%s))
             """)
-            params.extend([f'%{connection}%', f'%{connection}%', f'%{connection}%'])
+            params.extend([connection, connection, connection])
         
         if conditions:
             query += " AND " + " AND ".join(conditions)

@@ -271,12 +271,13 @@ def search_jsonb():
             normalized_specs = normalizer.normalize_specs(normalized_specs, component_type)
             print(f"   - Normalized specs: {normalized_specs}")
         
-        # Search JSONB tables
+        # Search JSONB tables - exact match only (no relaxation)
+        # If no results, LLM at application level should modify query and retry
         jsonb_results = search_jsonb_tiered(
             normalized_specs,
             component_type=component_type,
             max_results=max_results,
-            relax_constraints=True
+            relax_constraints=False  # Strict matching - let LLM handle relaxation
         )
         
         if not jsonb_results:
