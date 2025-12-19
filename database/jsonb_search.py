@@ -82,16 +82,36 @@ def extract_pressure_number(pressure_str: Optional[str]) -> Optional[int]:
 def get_component_tables(conn) -> List[str]:
     """Get list of all component spec tables (excluding old valve_specs)."""
     cursor = conn.cursor()
+    # Look for tables ending in _specs (but not valve_specs)
     cursor.execute("""
         SELECT table_name 
         FROM information_schema.tables 
         WHERE table_schema = 'public' 
         AND table_name LIKE '%_specs'
-        AND table_name != 'valve_specs'  -- Exclude old valve_specs table
+        AND table_name != 'valve_specs'
         ORDER BY table_name
     """)
     tables = [row[0] for row in cursor.fetchall()]
     cursor.close()
+    
+    # Debug: print what we found
+    print(f"📊 get_component_tables found {len(tables)} tables")
+    if tables:
+        print(f"   First 5: {tables[:5]}")
+    else:
+        # Check what tables actually exist
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public' 
+            AND (table_name LIKE '%spec%' OR table_name LIKE '%valve%')
+            ORDER BY table_name
+        """)
+        all_related = [row[0] for row in cursor.fetchall()]
+        cursor.close()
+        print(f"   Related tables found: {all_related[:10]}")
+    
     return tables
 
 
@@ -220,9 +240,20 @@ def search_jsonb_tiered(
         
         if not component_tables:
             print("⚠️ No component tables found. Make sure you've crawled products.")
+            print("   Looking for tables with pattern: %_specs (excluding valve_specs)")
+            # Debug: check what tables actually exist
+            cursor.execute("""
+                SELECT table_name 
+                FROM information_schema.tables 
+                WHERE table_schema = 'public' 
+                AND table_name LIKE '%spec%'
+                ORDER BY table_name
+            """)
+            all_spec_tables = [row['table_name'] for row in cursor.fetchall()]
+            print(f"   Found these spec tables: {all_spec_tables}")
             return []
         
-        print(f"🔍 Found {len(component_tables)} component tables")
+        print(f"🔍 Found {len(component_tables)} component tables: {component_tables[:5]}")
         
         # Build UNION query
         union_query = build_union_query(component_tables)
@@ -312,9 +343,22 @@ def search_jsonb_tiered(
         query += f" ORDER BY id DESC LIMIT {max_results * 3}"
         
         print(f"🔍 Executing query with {len(conditions)} conditions")
+        print(f"   Query: {query[:500]}...")
+        print(f"   Params: {params[:10]}...")
         cursor.execute(query, params)
         results = cursor.fetchall()
         print(f"   Found {len(results)} results")
+        
+        if len(results) == 0:
+            print("⚠️ No results found. Checking if tables have data...")
+            # Quick check: count total rows in component tables
+            for table in component_tables[:3]:
+                try:
+                    cursor.execute(f"SELECT COUNT(*) as cnt FROM {table} WHERE tech_specs IS NOT NULL")
+                    cnt = cursor.fetchone()['cnt']
+                    print(f"   {table}: {cnt} rows with tech_specs")
+                except Exception as e:
+                    print(f"   {table}: Error - {e}")
         
         # Calculate scores and sort
         scored_results = []
