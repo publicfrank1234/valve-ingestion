@@ -159,3 +159,8 @@ python scripts/check_progress.py
 - Progress is saved, so you can stop/restart anytime
 - The system will resume from where it left off
 
+
+
+
+
+
