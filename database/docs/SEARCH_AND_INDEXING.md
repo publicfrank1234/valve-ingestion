@@ -111,3 +111,8 @@ To ensure comprehensive compatibility, we should:
 4. **Handle abbreviations** (CS, SS, NPT, SW, etc.)
 5. **Handle case variations** (Carbon Steel, carbon steel, CARBON STEEL)
 6. **Handle spelling variations** (Socket-weld, Socket weld, Socket-Weld)
+
+
+
+
+

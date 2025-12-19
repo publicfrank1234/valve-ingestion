@@ -116,3 +116,8 @@ MATERIAL_COMPATIBILITY = {
 4. Update `search_specs.py` with the mappings
 5. Test with various input variations
 
+
+
+
+
+

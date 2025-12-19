@@ -223,9 +223,12 @@ def search_specs(
         
         if size_nominal:
             # Size normalization (handle format variations)
+            # Remove quotes and normalize
+            size_clean = size_nominal.strip().replace('"', '').replace("'", '')
+            
             if USE_COMPREHENSIVE_MAPPINGS and comprehensive_normalize_size:
                 # Use comprehensive size normalization function
-                normalized_size = comprehensive_normalize_size(size_nominal)
+                normalized_size = comprehensive_normalize_size(size_clean)
             else:
                 # Use inline normalization
                 SIZE_NORMALIZATION = {
@@ -240,12 +243,40 @@ def search_specs(
                     '1.5': '1-1/2',
                     '2.5': '2-1/2',
                 }
-                normalized_size = SIZE_NORMALIZATION.get(size_nominal.strip(), size_nominal.strip())
+                normalized_size = SIZE_NORMALIZATION.get(size_clean, size_clean)
             
-            # Exact match for size (fastest) - try both original and normalized
-            conditions.append("(size_nominal = %s OR size_nominal = %s)")
-            params.append(size_nominal.strip())
-            params.append(normalized_size)
+            print(f"🔍 Size matching: original='{size_nominal}', cleaned='{size_clean}', normalized='{normalized_size}'")
+            
+            # Flexible size matching: try exact matches first, then use ILIKE for partial matches
+            # This handles cases where database has "6", "6\"", "6 inch", etc.
+            # Try multiple formats for better matching
+            size_variations = [
+                size_clean,  # "6"
+                normalized_size,  # Normalized version
+                f'"{size_clean}"',  # "6" with quotes
+                f'"{normalized_size}"',  # Normalized with quotes
+                f'{size_clean}"',  # 6" (no opening quote)
+                f'{normalized_size}"',  # Normalized with closing quote
+            ]
+            # Remove duplicates while preserving order
+            seen = set()
+            unique_variations = []
+            for v in size_variations:
+                if v not in seen:
+                    seen.add(v)
+                    unique_variations.append(v)
+            
+            # Build OR condition for all variations
+            size_conditions = []
+            for variation in unique_variations:
+                size_conditions.append("size_nominal = %s")
+                params.append(variation)
+            
+            # Also try ILIKE for partial matches (handles "6 inch", "6\"", etc.)
+            size_conditions.append("size_nominal ILIKE %s")
+            params.append(f"%{size_clean}%")
+            
+            conditions.append(f"({' OR '.join(size_conditions)})")
         
         if body_material:
             # Fast material matching using compatibility list
@@ -317,6 +348,11 @@ def search_specs(
         # Build query
         where_clause = " AND ".join(conditions) if conditions else "1=1"
         
+        print(f"🔍 First Search Query:")
+        print(f"   - Conditions: {conditions}")
+        print(f"   - Params: {params}")
+        print(f"   - Where clause: {where_clause}")
+        
         # Use DISTINCT ON to deduplicate by spec_sheet_url (or source_url if spec_sheet_url is NULL)
         # This ensures we only return one result per unique link
         # Then order final results by extracted_at DESC to get most recent first
@@ -353,8 +389,12 @@ def search_specs(
         
         params.append(max_results)
         
+        print(f"🔍 Executing first search query with {len(params)} parameters")
         cursor.execute(query, params)
         results = cursor.fetchall()
+        print(f"🔍 First search returned {len(results)} results")
+        if len(results) == 0:
+            print(f"⚠️ First search found 0 results - will try relaxed searches")
         
         # If no results and end_connection was specified and make_end_connection_optional is True,
         # try again without end_connection requirement (make it optional)
@@ -416,6 +456,7 @@ def search_specs(
                 
                 cursor.execute(query_without_end, params_without_end)
                 results = cursor.fetchall()
+                print(f"🔍 After relaxing end_connection: found {len(results)} results")
         
         # If still no results and body_material was specified and make_material_optional is True,
         # AND we have both size and type (critical specs that must match),
@@ -454,6 +495,12 @@ def search_specs(
                 params_without_material.append(max_results)
                 
                 where_clause_without_material = " AND ".join(conditions_without_material_copy) if conditions_without_material_copy else "1=1"
+                
+                print(f"🔍 Relaxed Material Search Query:")
+                print(f"   - Conditions (without material): {conditions_without_material_copy}")
+                print(f"   - Params (without material): {params_without_material}")
+                print(f"   - Where clause: {where_clause_without_material}")
+                
                 query_without_material = f"""
                     SELECT * FROM (
                         SELECT DISTINCT ON (COALESCE(spec_sheet_url, source_url))
@@ -485,9 +532,12 @@ def search_specs(
                     LIMIT %s
                 """
                 
+                print(f"🔍 Executing relaxed material search query with {len(params_without_material)} parameters")
                 cursor.execute(query_without_material, params_without_material)
                 results = cursor.fetchall()
                 print(f"✅ RELAXED MATERIAL SEARCH: Found {len(results)} results without material filter")
+                if len(results) > 0:
+                    print(f"📊 Sample results: {[{'id': r.get('id'), 'valve_type': r.get('valve_type'), 'size': r.get('size_nominal'), 'material': r.get('body_material')} for r in results[:3]]}")
             else:
                 print(f"⚠️ RELAXED MATERIAL SEARCH: Material condition not found in conditions, skipping retry")
         else:

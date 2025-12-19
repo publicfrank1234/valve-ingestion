@@ -102,3 +102,8 @@ We need to either:
 1. Call Python API endpoint (uses compatibility mappings)
 2. Implement compatibility logic in n8n Code node
 3. Have Agent 1 expand all abbreviations before search
+
+
+
+
+

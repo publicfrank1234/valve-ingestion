@@ -218,3 +218,8 @@ The server reads from `.env` file:
 - `DB_PASSWORD` - Database password
 - `PORT` - API server port (default: 6000)
 
+
+
+
+
+
