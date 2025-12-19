@@ -226,23 +226,113 @@ def search_jsonb():
     """
     Search component-system tables using JSONB fields.
     
-    NOTE: This endpoint is not yet implemented. It was removed to eliminate
-    dependency on component-system repository. 
+    This endpoint searches the newly ingested component-system tables (JSONB format).
+    Use this for searching the new crawled data.
     
-    To implement: Add JSONB search logic directly in this file or create
-    a local jsonb_search.py module in this directory.
+    Request:
+    {
+        "normalizedSpecs": {
+            "size": "6",
+            "valveType": "Butterfly Valve",
+            "material": "Stainless Steel",
+            "seatMaterial": "EPDM",
+            "pressureRating": "150",
+            "endConnection": "Lug"
+        },
+        "maxResults": 10
+    }
     """
-    return jsonify({
-        "success": False,
-        "error": "JSONB search endpoint not implemented. Use /search/normalized for valve_specs table search."
-    }), 501
-        
     try:
+        if not jsonb_search_available:
+            return jsonify({
+                "success": False,
+                "error": "JSONB search not available. Make sure jsonb_search.py and synonym_normalizer.py are in the database directory."
+            }), 503
+        
+        data = request.get_json() or {}
+        normalized_specs = data.get('normalizedSpecs', {})
+        max_results = data.get('maxResults', 10)
+        
+        if not normalized_specs:
+            return jsonify({
+                "success": False,
+                "error": "normalizedSpecs is required"
+            }), 400
+        
+        print(f"🔍 API /search/jsonb called:")
+        print(f"   - normalizedSpecs: {normalized_specs}")
+        print(f"   - maxResults: {max_results}")
+        
+        # Extract valve type
+        component_type = normalized_specs.get('valveType') or normalized_specs.get('componentType')
+        
+        # Normalize synonyms first
+        if normalizer:
+            normalized_specs = normalizer.normalize_specs(normalized_specs, component_type)
+            print(f"   - Normalized specs: {normalized_specs}")
+        
+        # Search JSONB tables
+        jsonb_results = search_jsonb_tiered(
+            normalized_specs,
+            component_type=component_type,
+            max_results=max_results,
+            relax_constraints=True
+        )
+        
+        if not jsonb_results:
+            return jsonify({
+                "success": True,
+                "matches": [],
+                "bestMatch": None,
+                "count": 0
+            })
+        
+        # Format results for n8n compatibility
+        formatted_matches = []
+        for result in jsonb_results:
+            metadata = result.get('metadata', {})
+            if isinstance(metadata, str):
+                try:
+                    metadata = json.loads(metadata)
+                except:
+                    metadata = {}
+            
+            tech_specs = result.get('tech_specs', {})
+            if isinstance(tech_specs, str):
+                try:
+                    tech_specs = json.loads(tech_specs)
+                except:
+                    tech_specs = {}
+            
+            formatted_matches.append({
+                "id": result.get('id'),
+                "sourceUrl": result.get('source_url'),
+                "source_url": result.get('source_url'),
+                "componentType": result.get('component_type'),
+                "item": result.get('item'),
+                "price": metadata.get('price') if isinstance(metadata, dict) else None,
+                "starting_price": metadata.get('price') if isinstance(metadata, dict) else None,
+                "description": metadata.get('title') if isinstance(metadata, dict) else None,
+                "sku": metadata.get('sku') if isinstance(metadata, dict) else None,
+                "score": result.get('score', 0),
+                "tier": result.get('tier', 4),
+                "techSpecs": tech_specs,
+                "metadata": metadata
+            })
+        
+        best_match = formatted_matches[0] if formatted_matches else None
+        
         return jsonify({
-            "success": False,
-            "error": "JSONB search endpoint not implemented. Use /search/normalized for valve_specs table search."
-        }), 501
+            "success": True,
+            "matches": formatted_matches,
+            "bestMatch": best_match,
+            "count": len(formatted_matches)
+        })
+    
     except Exception as e:
+        print(f"❌ Error in /search/jsonb: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({
             "success": False,
             "error": str(e)
