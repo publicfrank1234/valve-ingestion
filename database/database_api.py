@@ -32,11 +32,6 @@ except ImportError:
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
-# Add component-system paths for JSONB search
-component_system_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'component-system')
-sys.path.insert(0, os.path.join(component_system_path, 'database'))
-sys.path.insert(0, os.path.join(component_system_path, 'api'))
-
 # Import from same directory (works as both module and script)
 try:
     # Try absolute import first (when run as script)
@@ -54,37 +49,20 @@ except ImportError:
         search_specs = search_specs_module.search_specs
         search_specs_by_normalized_specs = search_specs_module.search_specs_by_normalized_specs
 
-# Try to import JSONB search (new component-system tables)
-jsonb_search_available = False
+# Import JSONB search functions from local module
 try:
-    # Try importing from component-system/api/jsonb_search.py
-    jsonb_search_path = os.path.join(component_system_path, 'api', 'jsonb_search.py')
-    if os.path.exists(jsonb_search_path):
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("jsonb_search", jsonb_search_path)
-        jsonb_search_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(jsonb_search_module)
-        search_jsonb_tiered = jsonb_search_module.search_jsonb_tiered
-        
-        # Import synonym normalizer
-        synonym_normalizer_path = os.path.join(component_system_path, 'database', 'synonym_normalizer.py')
-        if os.path.exists(synonym_normalizer_path):
-            spec2 = importlib.util.spec_from_file_location("synonym_normalizer", synonym_normalizer_path)
-            synonym_module = importlib.util.module_from_spec(spec2)
-            spec2.loader.exec_module(synonym_module)
-            SynonymNormalizer = synonym_module.SynonymNormalizer
-            normalizer = SynonymNormalizer()
-            jsonb_search_available = True
-            print("✅ JSONB search and synonym normalizer loaded")
-        else:
-            print("⚠️ synonym_normalizer.py not found")
-            normalizer = None
-    else:
-        print(f"⚠️ jsonb_search.py not found at {jsonb_search_path}")
-        normalizer = None
-except Exception as e:
+    from jsonb_search import search_jsonb_tiered
+    from synonym_normalizer import SynonymNormalizer
+    jsonb_search_available = True
+    normalizer = SynonymNormalizer()
+    print("✅ JSONB search and synonym normalizer loaded")
+except ImportError as e:
     print(f"⚠️ JSONB search not available: {e}")
-    print("   → JSONB search endpoints will not work")
+    jsonb_search_available = False
+    normalizer = None
+except Exception as e:
+    print(f"⚠️ JSONB search initialization failed: {e}")
+    jsonb_search_available = False
     normalizer = None
 
 app = Flask(__name__)
@@ -248,113 +226,23 @@ def search_jsonb():
     """
     Search component-system tables using JSONB fields.
     
-    This endpoint ONLY searches the newly ingested component-system tables (JSONB format).
-    Use this for searching the new crawled data.
+    NOTE: This endpoint is not yet implemented. It was removed to eliminate
+    dependency on component-system repository. 
     
-    Request:
-    {
-        "normalizedSpecs": {
-            "size": "6",
-            "valveType": "Butterfly Valve",
-            "material": "Stainless Steel",
-            "seatMaterial": "EPDM",
-            "pressureRating": "150",
-            "endConnection": "Lug"
-        },
-        "maxResults": 10
-    }
+    To implement: Add JSONB search logic directly in this file or create
+    a local jsonb_search.py module in this directory.
     """
+    return jsonify({
+        "success": False,
+        "error": "JSONB search endpoint not implemented. Use /search/normalized for valve_specs table search."
+    }), 501
+        
     try:
-        if not jsonb_search_available:
-            return jsonify({
-                "success": False,
-                "error": "JSONB search not available. Make sure component-system tables are set up."
-            }), 503
-        
-        data = request.get_json() or {}
-        normalized_specs = data.get('normalizedSpecs', {})
-        max_results = data.get('maxResults', 10)
-        
-        if not normalized_specs:
-            return jsonify({
-                "success": False,
-                "error": "normalizedSpecs is required"
-            }), 400
-        
-        print(f"🔍 API /search/jsonb called:")
-        print(f"   - normalizedSpecs: {normalized_specs}")
-        print(f"   - maxResults: {max_results}")
-        
-        # Extract valve type
-        component_type = normalized_specs.get('valveType') or normalized_specs.get('componentType')
-        
-        # Normalize synonyms first
-        if normalizer:
-            normalized_specs = normalizer.normalize_specs(normalized_specs, component_type)
-            print(f"   - Normalized specs: {normalized_specs}")
-        
-        # Search JSONB tables
-        jsonb_results = search_jsonb_tiered(
-            normalized_specs,
-            component_type=component_type,
-            max_results=max_results,
-            relax_constraints=True
-        )
-        
-        if not jsonb_results:
-            return jsonify({
-                "success": True,
-                "matches": [],
-                "bestMatch": None,
-                "count": 0
-            })
-        
-        # Format results for n8n compatibility
-        formatted_matches = []
-        for result in jsonb_results:
-            metadata = result.get('metadata', {})
-            if isinstance(metadata, str):
-                try:
-                    metadata = json.loads(metadata)
-                except:
-                    metadata = {}
-            
-            tech_specs = result.get('tech_specs', {})
-            if isinstance(tech_specs, str):
-                try:
-                    tech_specs = json.loads(tech_specs)
-                except:
-                    tech_specs = {}
-            
-            formatted_matches.append({
-                "id": result.get('id'),
-                "sourceUrl": result.get('source_url'),
-                "source_url": result.get('source_url'),
-                "componentType": result.get('component_type'),
-                "item": result.get('item'),
-                "price": metadata.get('price') if isinstance(metadata, dict) else None,
-                "starting_price": metadata.get('price') if isinstance(metadata, dict) else None,
-                "description": metadata.get('title') if isinstance(metadata, dict) else None,
-                "sku": metadata.get('sku') if isinstance(metadata, dict) else None,
-                "score": result.get('score', 0),
-                "tier": result.get('tier', 4),
-                "techSpecs": tech_specs,
-                "metadata": metadata
-            })
-        
-        best_match = formatted_matches[0] if formatted_matches else None
-        
         return jsonify({
-            "success": True,
-            "matches": formatted_matches,
-            "bestMatch": best_match,
-            "count": len(formatted_matches)
-        })
-    
+            "success": False,
+            "error": "JSONB search endpoint not implemented. Use /search/normalized for valve_specs table search."
+        }), 501
     except Exception as e:
-        print(f"❌ Error in /search/jsonb: {e}")
-        import traceback
-        traceback.print_exc()
         return jsonify({
             "success": False,
             "error": str(e)
