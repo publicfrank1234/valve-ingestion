@@ -32,10 +32,13 @@ def get_db_connection():
     pooler_host = os.getenv('DB_POOLER_HOST')
     if pooler_host:
         pooler_user = os.getenv('DB_POOLER_USER', 'postgres.deaohsesihodomvhqlxe')
-        pooler_port = os.getenv('DB_POOLER_PORT', '6543')  # Default pooler port
+        pooler_port = os.getenv('DB_POOLER_PORT', '5432')  # Default to 5432 (transaction mode) or 6543 (session mode)
         conn_string = f"postgresql://{pooler_user}:{encoded_password}@{pooler_host}:{pooler_port}/postgres?sslmode=require"
+        print(f"🔌 Attempting pooler connection: {pooler_host}:{pooler_port}")
         try:
-            return psycopg2.connect(conn_string)
+            conn = psycopg2.connect(conn_string)
+            print(f"✅ Pooler connection successful")
+            return conn
         except Exception as e:
             print(f"⚠️  Pooler connection failed: {e}")
             print("Trying direct connection...")
