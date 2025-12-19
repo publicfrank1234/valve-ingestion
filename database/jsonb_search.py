@@ -234,12 +234,14 @@ def search_jsonb_tiered(
     Returns:
         List of matching products with scores and tiers
     """
+    print(f"🔍 search_jsonb_tiered called with: {normalized_specs}, component_type={component_type}", flush=True)
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     
     try:
         # Get all component tables
         component_tables = get_component_tables(conn)
+        print(f"📊 get_component_tables returned {len(component_tables)} tables", flush=True)
         
         if not component_tables:
             print("⚠️ No component tables found. Make sure you've crawled products.")
@@ -256,7 +258,7 @@ def search_jsonb_tiered(
             print(f"   Found these spec tables: {all_spec_tables}")
             return []
         
-        print(f"🔍 Found {len(component_tables)} component tables: {component_tables[:5]}")
+        print(f"🔍 Found {len(component_tables)} component tables: {component_tables[:5]}", flush=True)
         
         # Build UNION query
         union_query = build_union_query(component_tables)
@@ -334,14 +336,14 @@ def search_jsonb_tiered(
         
         query += f" ORDER BY id DESC LIMIT {max_results * 3}"
         
-        print(f"🔍 Executing query with {len(conditions)} conditions")
-        print(f"   Search criteria: size={size}, valve_type={valve_type}, seat_material={seat_material}, material={material}")
-        print(f"   Query (first 800 chars): {query[:800]}")
-        print(f"   Params ({len(params)}): {params}")
+        print(f"🔍 Executing query with {len(conditions)} conditions", flush=True)
+        print(f"   Search criteria: size={size}, valve_type={valve_type}, seat_material={seat_material}, material={material}", flush=True)
+        print(f"   Query (first 800 chars): {query[:800]}", flush=True)
+        print(f"   Params ({len(params)}): {params}", flush=True)
         try:
             cursor.execute(query, params)
             results = cursor.fetchall()
-            print(f"   ✅ Found {len(results)} results")
+            print(f"   ✅ Found {len(results)} results", flush=True)
         except Exception as e:
             print(f"   ❌ Query execution error: {e}")
             import traceback
