@@ -102,47 +102,56 @@ class SynonymNormalizer:
         """
         normalized = {}
         
+        # Fields that should be normalized with synonyms
+        synonym_fields = ['material', 'bodyMaterial', 'body_material', 
+                         'seatMaterial', 'seat_material', 'seat',
+                         'endConnection', 'connection', 'end_connection',
+                         'valveType', 'valve_type', 'type',
+                         'pressureRating', 'pressure', 'pressure_rating']
+        
         for key, value in specs.items():
             if value is None:
                 continue
             
-            value_lower = str(value).lower().strip()
+            # Only apply synonym normalization to specific fields
+            should_normalize = any(key.lower() == sf.lower() for sf in synonym_fields)
             
-            # Check synonym map
-            if value_lower in self.synonym_map:
-                mapping = self.synonym_map[value_lower]
-                canonical = mapping['canonical']
-            else:
-                # Try partial matching
-                found = False
-                for synonym, mapping in self.synonym_map.items():
-                    if synonym in value_lower or value_lower in synonym:
-                        canonical = mapping['canonical']
-                        found = True
-                        break
+            if should_normalize:
+                value_lower = str(value).lower().strip()
                 
-                if not found:
-                    # Keep original, just normalize format
-                    canonical = value_lower.replace(' ', '_')
-            
-            # Map to correct field name
-            if key in ['material', 'bodyMaterial', 'body_material']:
-                normalized['material'] = canonical
-            elif key in ['seatMaterial', 'seat_material', 'seat']:
-                normalized['seatMaterial'] = canonical
-            elif key in ['endConnection', 'connection', 'end_connection']:
-                normalized['endConnection'] = canonical
-            elif key in ['valveType', 'valve_type', 'type']:
-                normalized['valveType'] = canonical
-            elif key in ['pressureRating', 'pressure', 'pressure_rating']:
-                normalized['pressureRating'] = canonical
+                # Check synonym map
+                if value_lower in self.synonym_map:
+                    mapping = self.synonym_map[value_lower]
+                    canonical = mapping['canonical']
+                else:
+                    # Try partial matching
+                    found = False
+                    for synonym, mapping in self.synonym_map.items():
+                        if synonym in value_lower or value_lower in synonym:
+                            canonical = mapping['canonical']
+                            found = True
+                            break
+                    
+                    if not found:
+                        # Keep original, just normalize format
+                        canonical = value_lower.replace(' ', '_')
+                
+                # Map to correct field name
+                if key in ['material', 'bodyMaterial', 'body_material']:
+                    normalized['material'] = canonical
+                elif key in ['seatMaterial', 'seat_material', 'seat']:
+                    normalized['seatMaterial'] = canonical
+                elif key in ['endConnection', 'connection', 'end_connection']:
+                    normalized['endConnection'] = canonical
+                elif key in ['valveType', 'valve_type', 'type']:
+                    normalized['valveType'] = canonical
+                elif key in ['pressureRating', 'pressure', 'pressure_rating']:
+                    normalized['pressureRating'] = canonical
+                else:
+                    # Keep original key with normalized value
+                    normalized[key] = canonical
             else:
-                # Keep original key
-                normalized[key] = canonical
-        
-        # Preserve other fields (like size)
-        for key, value in specs.items():
-            if key not in normalized and value is not None:
+                # For non-synonym fields (like size), keep original value
                 normalized[key] = value
         
         return normalized
