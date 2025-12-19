@@ -279,63 +279,52 @@ def search_jsonb_tiered(
         params = []
         conditions = []
         
-        # Size match
+        # Size match - use aliased columns from UNION query
         if size:
             conditions.append("""
-                (size = %s 
-                 OR size ILIKE %s
-                 OR tech_specs->>'size' = %s
-                 OR tech_specs->>'size' ILIKE %s)
+                (size = %s OR size ILIKE %s)
             """)
-            params.extend([size, f'%{size}%', size, f'%{size}%'])
+            params.extend([size, f'%{size}%'])
         
-        # Valve type match
+        # Valve type match - use aliased columns from UNION query
         if valve_type:
             conditions.append("""
-                (item ILIKE %s 
-                 OR component_type ILIKE %s
-                 OR tech_specs->>'item' ILIKE %s)
+                (item ILIKE %s OR component_type ILIKE %s)
             """)
-            params.extend([f'%{valve_type}%', f'%{valve_type}%', f'%{valve_type}%'])
+            params.extend([f'%{valve_type}%', f'%{valve_type}%'])
         
-        # Pressure match
+        # Pressure match - use aliased columns from UNION query
         if pressure:
             pressure_num = extract_pressure_number(pressure)
             if pressure_num:
                 conditions.append("""
-                    (CAST(REGEXP_REPLACE(COALESCE(pressure_rating, pressure_class, tech_specs->>'pressure_rating', tech_specs->>'pressure_class'), '[^0-9]', '', 'g') AS INTEGER) >= %s
-                     OR pressure_class ILIKE %s
-                     OR tech_specs->>'pressure_class' ILIKE %s)
+                    (CAST(REGEXP_REPLACE(COALESCE(pressure_rating, pressure_class, ''), '[^0-9]', '', 'g') AS INTEGER) >= %s
+                     OR pressure_class ILIKE %s)
                 """)
-                params.extend([pressure_num, f'%{pressure_num}%', f'%{pressure_num}%'])
+                params.extend([pressure_num, f'%{pressure_num}%'])
         
-        # Material match
+        # Material match - use aliased columns from UNION query
         if material:
             conditions.append("""
-                (body_material ILIKE %s
-                 OR tech_specs->>'body_material' ILIKE %s)
+                (body_material ILIKE %s)
             """)
-            params.extend([f'%{material}%', f'%{material}%'])
+            params.extend([f'%{material}%'])
         
-        # Seat material match
+        # Seat material match - use aliased columns from UNION query
         if seat_material:
             conditions.append("""
-                (seat_material ILIKE %s
-                 OR tech_specs->>'seat_material' ILIKE %s)
+                (seat_material ILIKE %s)
             """)
-            params.extend([f'%{seat_material}%', f'%{seat_material}%'])
+            params.extend([f'%{seat_material}%'])
         
-        # Connection match
+        # Connection match - use aliased columns from UNION query
         if connection:
             conditions.append("""
                 (connection_type ILIKE %s 
                  OR end_connection ILIKE %s
-                 OR tech_specs->>'connection_type' ILIKE %s
-                 OR tech_specs->>'end_connection' ILIKE %s
-                 OR body_style ILIKE %s
-                 OR tech_specs->>'body_style' ILIKE %s)
+                 OR body_style ILIKE %s)
             """)
-            params.extend([f'%{connection}%', f'%{connection}%', f'%{connection}%', f'%{connection}%', f'%{connection}%', f'%{connection}%'])
+            params.extend([f'%{connection}%', f'%{connection}%', f'%{connection}%'])
         
         if conditions:
             query += " AND " + " AND ".join(conditions)
