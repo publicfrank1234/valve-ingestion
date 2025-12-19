@@ -335,11 +335,18 @@ def search_jsonb_tiered(
         query += f" ORDER BY id DESC LIMIT {max_results * 3}"
         
         print(f"🔍 Executing query with {len(conditions)} conditions")
-        print(f"   Query: {query[:500]}...")
-        print(f"   Params: {params[:10]}...")
-        cursor.execute(query, params)
-        results = cursor.fetchall()
-        print(f"   Found {len(results)} results")
+        print(f"   Search criteria: size={size}, valve_type={valve_type}, seat_material={seat_material}, material={material}")
+        print(f"   Query (first 800 chars): {query[:800]}")
+        print(f"   Params ({len(params)}): {params}")
+        try:
+            cursor.execute(query, params)
+            results = cursor.fetchall()
+            print(f"   ✅ Found {len(results)} results")
+        except Exception as e:
+            print(f"   ❌ Query execution error: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
         
         if len(results) == 0:
             print("⚠️ No results found. Checking if tables have data...")
