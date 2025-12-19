@@ -17,25 +17,38 @@ from urllib.parse import quote_plus
 
 def get_db_connection():
     """Get database connection using same logic as search_specs.py."""
-    # Try DATABASE_URL first
+    # Try DATABASE_URL first (full connection string)
     database_url = os.getenv('DATABASE_URL')
     if database_url:
-        return psycopg2.connect(database_url, sslmode='require')
+        return psycopg2.connect(database_url)
     
-    # Use individual environment variables
-    db_host = os.getenv('DB_HOST')
-    db_port = os.getenv('DB_PORT', '5432')
-    db_name = os.getenv('DB_NAME', 'postgres')
-    db_user = os.getenv('DB_USER', 'postgres')
-    db_password = os.getenv('DB_PASSWORD')
+    # Otherwise use individual environment variables
+    password = os.getenv('DB_PASSWORD', 'valve@123')
     
-    if not db_host or not db_password:
-        raise ValueError("Database credentials not found! Set DB_HOST and DB_PASSWORD")
+    # URL encode password if needed
+    encoded_password = quote_plus(password)
     
-    encoded_password = quote_plus(db_password)
-    conn_string = f"postgresql://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}"
+    # Try connection pooler first (if pooler host is set) - supports IPv4
+    pooler_host = os.getenv('DB_POOLER_HOST')
+    if pooler_host:
+        pooler_user = os.getenv('DB_POOLER_USER', 'postgres.deaohsesihodomvhqlxe')
+        pooler_port = os.getenv('DB_POOLER_PORT', '6543')  # Default pooler port
+        conn_string = f"postgresql://{pooler_user}:{encoded_password}@{pooler_host}:{pooler_port}/postgres?sslmode=require"
+        try:
+            return psycopg2.connect(conn_string)
+        except Exception as e:
+            print(f"⚠️  Pooler connection failed: {e}")
+            print("Trying direct connection...")
     
-    return psycopg2.connect(conn_string, sslmode='require')
+    # Fall back to direct connection (or use DB_HOST if it's already a pooler)
+    return psycopg2.connect(
+        host=os.getenv('DB_HOST', 'db.deaohsesihodomvhqlxe.supabase.co'),
+        port=int(os.getenv('DB_PORT', '5432')),
+        database=os.getenv('DB_NAME', 'postgres'),
+        user=os.getenv('DB_USER', 'postgres'),
+        password=password,
+        sslmode='require'
+    )
 
 
 def normalize_size(size: Optional[str]) -> Optional[str]:
